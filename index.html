@@ -3,9 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adrian's World</title>
+    <title>Adrian L Thomas | Senior Software Engineer, MEng</title>
+    <style>
+        :root {
+            --dark-blue: #0a192f;
+            --medium-blue: #172a45;
+            --light-blue: #8892b0;
+            --lightest-blue: #ccd6f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--dark-blue);
+            color: var(--lightest-blue);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--light-blue);
+            margin-bottom: 2rem;
+            font-weight: normal;
+        }
+
+        .links {
+            margin-top: 2rem;
+        }
+
+        .links a {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            margin: 0.5rem;
+            color: var(--lightest-blue);
+            text-decoration: none;
+            border: 1px solid var(--light-blue);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .links a:hover {
+            background-color: var(--medium-blue);
+            transform: translateY(-2px);
+        }
+
+        .links a span {
+            font-size: 1.4em;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .blog-link {
+            margin-top: 3rem;
+            font-size: 0.9rem;
+            color: var(--light-blue);
+        }
+
+        .blog-link a {
+            color: var(--lightest-blue);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--light-blue);
+        }
+
+        .blog-link a:hover {
+            border-bottom-style: solid;
+        }
+    </style>
 </head>
 <body>
-    <p>Hello. Looking for my blog? You can <a href="/blog">find it here.</a></p>
+    <div class="container">
+        <h1>Adrian L Thomas</h1>
+        <h2>Senior Software Engineer, MEng</h2>
+        
+        <div class="links">
+            <a href="/blog">Blog <span>📝</span></a>
+            <a href="https://linkedin.com/in/adrianthomas" target="_blank">LinkedIn <span>📄</span></a>
+            <a href="mailto:hello@adrian-thomas.com">Email <span>📧</span></a>
+            <a href="https://github.com/AdrianLThomas" target="_blank">GitHub <span>👨‍💻</span></a>
+        </div>
+
+        <p class="blog-link">
+            Interested in my thoughts? Check out my <a href="/blog">blog</a>.
+        </p>
+    </div>
 </body>
 </html>
