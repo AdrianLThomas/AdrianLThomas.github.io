@@ -6,10 +6,11 @@
     <title>Adrian L Thomas | Senior Software Engineer, MEng</title>
     <style>
         :root {
-            --dark-blue: #0a192f;
-            --medium-blue: #172a45;
-            --light-blue: #8892b0;
-            --lightest-blue: #ccd6f6;
+            --bg-blue: #15308b;
+            --primary-blue: #2563eb;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.85);
+            --button-hover: rgba(37, 99, 235, 0.15);
         }
 
         * {
@@ -20,8 +21,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--dark-blue);
-            color: var(--lightest-blue);
+            background: linear-gradient(145deg, #15308b, #18439c);
+            color: var(--text-secondary);
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -35,16 +36,18 @@
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1rem;
-            color: white;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
         }
 
         h2 {
             font-size: 1.5rem;
-            color: var(--light-blue);
+            color: var(--text-secondary);
             margin-bottom: 2rem;
             font-weight: normal;
+            opacity: 0.9;
         }
 
         .links {
@@ -55,15 +58,17 @@
             display: inline-block;
             padding: 0.8rem 1.5rem;
             margin: 0.5rem;
-            color: var(--lightest-blue);
+            color: var(--text-primary);
             text-decoration: none;
-            border: 1px solid var(--light-blue);
-            border-radius: 4px;
-            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
         }
 
         .links a:hover {
-            background-color: var(--medium-blue);
+            background: var(--button-hover);
+            border-color: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
 
@@ -76,17 +81,20 @@
         .blog-link {
             margin-top: 3rem;
             font-size: 0.9rem;
-            color: var(--light-blue);
+            color: var(--text-secondary);
+            opacity: 0.8;
         }
 
         .blog-link a {
-            color: var(--lightest-blue);
+            color: var(--text-primary);
             text-decoration: none;
-            border-bottom: 1px dotted var(--light-blue);
+            border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
+            transition: all 0.2s ease;
         }
 
         .blog-link a:hover {
             border-bottom-style: solid;
+            border-color: var(--text-primary);
         }
     </style>
 </head>
