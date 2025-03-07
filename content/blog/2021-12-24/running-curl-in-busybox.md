@@ -8,7 +8,7 @@ curl doesn't exist in BusyBox by default, but there is a way to do it - and it's
 
 BusyBox is an executable that typically gets used in low powered devices like routers, it gives you basic commands like `cd` or `ls` but if you want to `curl` something from the internet (e.g. HTTP POST): you can't. There's no package manager, and it's very awkward to do manually with netcat / raw TCP.
 
-You do have wget, but it doesn't provide HTTP POST behaviour, but it does let you HTTP GET... a pre-built curl binary!
+You do have wget, so you can HTTP GET... a pre-built curl binary!
 
 First, find out what CPU architecture you're on:
 ```bash
