@@ -62,7 +62,7 @@ function App() {
 export default App;
 ```
 
-We're using `idb://my-pgdata` when instantiating the client to use persistent browser storage. However there are also [other options](https://pglite.dev/docs/filesystems#filesystems) available.
+We're using `idb://my-pgdata` when instantiating the client to use persistent browser storage. However there are also [other storage options](https://pglite.dev/docs/filesystems#filesystems) available.
 
 ## Types, schema & migrations with Drizzle 
 You can probably skip this part if you don't want / need to use an ORM and are happy with arbritrary SQL. However if you'd like types and the ability to migrate between schemas, please continue...
@@ -173,24 +173,39 @@ migrate().then(renderApp);
 I've provided an example repo at the end of this post showing how I executed the migration wrapped in [Suspense](https://react.dev/reference/react/Suspense) so that a placeholder is shown during initalisation.
 
 # Basic CRUD operations
-.. TODO ... basically just drizzle at this point, but show some code.
+It's just Drizzle all the way forward now, there's a bunch of [documentation](https://orm.drizzle.team/docs/rqb), but here's some examples sticking with the TODO theme:
 
-# Getting data in and out
+```typescript
+/// src/app/db/actions.ts
+export async function fetchAllTodos() {
+  return db.select().from(todos).orderBy(todos.createdAt);
+}
 
-explain virtual device
+export async function addTodoAction(formData: FormData) {
+  const todo: typeof todos.$inferInsert = {
+    content: formData.get("content") as string,
+  };
+  const inserted = await db.insert(todos).values(todo).returning();
 
-# In
-.... can do csv import
-.. or can import with pgdump
+  return inserted[0];
+}
 
-# Out
-.. pg dump download
+export async function deleteTodoAction(formData: FormData) {
+  const id = parseInt(formData.get("id") as string);
+  const deleted = await db.delete(todos).where(eq(todos.id, id)).returning();
 
+  return deleted[0];
+}
+```
 
-# SQL Client?
+# Further reading
+## Getting data in and out
+pgdump
+csv import (can go in and out, link examples)
+
+## SQL Client
 ... TODO ... can't use the usual suspects
  but there is a repl...
-
  gotcha 3!! it's broken at time of writing - but maybe not today? check.
 
 
