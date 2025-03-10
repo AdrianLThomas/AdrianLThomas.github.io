@@ -6,7 +6,7 @@ description: You can run Postgres 100% in the browser client, I'll describe how,
 
 I've been playing around with [PGlite](https://pglite.dev/) ([Postgres](https://www.postgresql.org/) [WASM](https://developer.mozilla.org/en-US/docs/WebAssembly)), and it's pretty cool - you can run Postgres 100% in the browser client. There are some gotchas, so I'll run through how I got PGlite running with [Vite](https://vite.dev/) (React) and [Drizzle](https://orm.drizzle.team/) (ORM).
 
-# Getting started
+# Getting setup
 
 Run the Vite scaffolder with your favourite package manager (I'll continue to use Bun, but feel free to use your own flavour)
 ```bash
@@ -14,12 +14,9 @@ bun create vite
 ```
 and follow the steps to create a new React project.
 
-then add the dependencies:
+You can then add PGlite:
 ```bash
-bun add /
-    @electric-sql/pglite / # Postgres WASM
-    drizzle-orm # Strictly speaking not necessary if you don't want to use Drizzle ORM
-bun add -d drizzle-kit # Helpful for migrations
+bun add @electric-sql/pglite
 ```
 
 ## Gotcha #1 - Exclude PGlite from the bundle
@@ -40,8 +37,8 @@ export default defineConfig({
 ## PGlite 101
 We're now in a position to make a Postgres query!
 
-```typescript
-// App.tsx
+```tsx
+/// App.tsx
 import { useEffect } from "react";
 
 import { PGlite } from "@electric-sql/pglite";
@@ -67,8 +64,147 @@ export default App;
 
 We're using `idb://my-pgdata` when instantiating the client to use persistent browser storage. However there are also [other options](https://pglite.dev/docs/filesystems#filesystems) available.
 
+## Types, schema & migrations with Drizzle 
+You can probably skip this part if you don't want / need to use an ORM and are happy with arbritrary SQL. However if you'd like types and the ability to migrate between schemas, please continue...
+
+```bash
+bun add drizzle-orm # Let's us define the schema and gives us types
+bun add -d drizzle-kit # Helpful for migrations
+```
+
+You can then [create a schema with Drizzle](https://orm.drizzle.team/docs/sql-schema-declaration). For this example let's just create a simple TODO app:
+
+```typescript
+/// src/app/db/schema.ts
+
+import {
+    pgTable,
+    serial,
+    varchar,
+    boolean,
+    timestamp,
+  } from "drizzle-orm/pg-core";
+  
+  export const todos = pgTable("todos", {
+    id: serial("id").primaryKey(),
+    content: varchar("content", { length: 255 }).notNull(),
+    completed: boolean("completed").default(false),
+    createdAt: timestamp("created_at").defaultNow(),
+  });
+```
+
+Drizzle will provide us with some nice types based on this.
+
+## Gotcha #2 - How do you run migrations in the browser?
+The [PGlite / Drizzle get started guide](https://orm.drizzle.team/docs/get-started/pglite-new) is great, but it assumes you're running PGlite on the server. Thus there are some differences (and unfortunately an undocumented API we need to use..).
+
+Create a Drizzle config file:
+```typescript
+import type { Config } from "drizzle-kit";
+
+export default {
+  schema: "./src/app/db/schema.ts",
+  out: "./src/app/db/migrations",
+  dialect: "postgresql",
+  driver: "pglite",
+} satisfies Config;
+```
+
+Generate the migration:
+```bash
+npx drizzle-kit generate # generates the SQL files to perform a migration
+```
+
+Ordinarily you would now run `npx drizzle-kit migrate`, HOWEVER: you're not on the server, you're on the client! so this is never going to work. How do you run the migration in the browser?
+
+### Compile offline migrations
+
+Thankfully I came across a very [helpful post on GitHub](https://github.com/drizzle-team/drizzle-orm/discussions/2532) by [@daltonkyemiller](https://github.com/daltonkyemiller). They found an undocumented API that where we can take our generated SQL migration and convert it in to the JSON format required to run it against PGlite.
+
+```typescript
+// You could execute this standalone script with Bun like so:
+// drizzle-kit generate && bun ./src/app/db/compile-migrations.ts
+
+import { readMigrationFiles } from "drizzle-orm/migrator";
+import path from "path";
+
+const migrationsFolder = "./src/app/db/migrations";
+
+const migrations = readMigrationFiles({ migrationsFolder });
+
+await Bun.write(
+  path.join(process.cwd(), `${migrationsFolder}/migrations.json`),
+  JSON.stringify(migrations)
+);
+
+console.log("Migrations compiled!");
+```
+
+We now have a `migrations.json` file that can be used in the browser.
+
+🚨 _Unfortunately, as it's undocumented, the Drizzle team could change and break at any point in time. Unfortunately if you want to use Drizzle in the browser then there is no alternative at the time of writing._
+
+### Executing the migration
+Setup the migration:
+
+```typescript
+/// src/app/db/migrate.ts
+import type { MigrationConfig } from "drizzle-orm/migrator";
+import { db } from "./drizzle";
+import migrations from "./migrations/migrations.json";
+
+export async function migrate() {
+  // @ts-ignore
+  db.dialect.migrate(migrations, db.session, {
+    migrationsTable: "drizzle_migrations",
+  } satisfies Omit<MigrationConfig, "migrationsFolder">);
+}
+```
+
+and simply execute the exported `migrate` function, e.g.
+```tsx
+// root.ts
+
+import { migrate } from "./migrate"
+
+migrate().then(renderApp);
+```
+
+I've provided an example repo at the end of this post showing how I executed the migration wrapped in [Suspense](https://react.dev/reference/react/Suspense) so that a placeholder is shown during initalisation.
+
+# Basic CRUD operations
+.. TODO ... basically just drizzle at this point, but show some code.
+
+# Getting data in and out
+
+explain virtual device
+
+# In
+.... can do csv import
+.. or can import with pgdump
+
+# Out
+.. pg dump download
+
+
+# SQL Client?
+... TODO ... can't use the usual suspects
+ but there is a repl...
+
+ gotcha 3!! it's broken at time of writing - but maybe not today? check.
+
+
+# later...
+
+you can see the full repo here, with some additioanl things (suspense whilst db loads, REPL... etc)
+demo website here: ...
+
+feel free to discuss here or on linked in thanks.
 
 # TODOS, me only..
+- Remind myself & document in this guide why it's important:
+    -   driver: "pglite", produces an error without it.... what is it?
+    - what's the error when:     exclude: ["@electric-sql/pglite"], is not excluded?
 - Run through each step, sanity check I've not missed anything
 - Proof read
 - Fix links to always open externally - do this across blog...?
