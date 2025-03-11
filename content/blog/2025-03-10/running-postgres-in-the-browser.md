@@ -201,7 +201,7 @@ export async function deleteTodoAction(formData: FormData) {
 There's a number of options depending on what the use-case is, but I'll describe an approach I took. If you just want test data, you can use [drizzle-seed](https://orm.drizzle.team/docs/seed-overview).
 
 ## CSV
-One option to import data is with a CSV. Given it's running in the browser, you need to be able to obtain the CSV as a blob. This is then mapped to [PGlite's virtual device](https://pglite.dev/docs/api#dev-blob) `/dev/blob`, and then you can just copy the data like you ordinarily would:
+One option to import data is with a CSV. Given it's running in the browser, you need to be able to obtain the CSV as a blob. This is then mapped to [PGlite's virtual device](https://pglite.dev/docs/api#dev-blob) `/dev/blob`, and then you can just copy the data like you ordinarily would with SQL:
 
 ```typescript
 // example depicting the copying of citizen data from a CSV in to the citizens table.
@@ -217,28 +217,51 @@ await client.query(`
 })
 ```
 
-If you're storing your data in IndexedDB then you'll also want to query if the data has already been imported before doing so (to avoid doing so on each load!).
+_If you're storing your data in IndexedDB then you'll also want to query if the data has already been imported before doing so (to avoid doing so on each load!)._
 
-## pgdump
-
-### Data in
-
-### Data out
-
+## Alternatives
+PGlite also supports exporting to a tarball with [dumpDataDir](https://pglite.dev/docs/api#dumpdatadir), and importing with [loadDataDir](https://pglite.dev/docs/api#options). Here you can provide an [(example of both)](https://pglite.dev/examples/dump-data-dir)
 
 # SQL Client
-... TODO ... can't use the usual suspects
- but there is a repl...
- gotcha 3!! it's broken at time of writing - but maybe not today? check.
+You might be tempted to reach for your favourite Postgres client (and/or Drizzle Studio). Unfortunately you cannot use it (there's no endpoint to connect to!).
 
+One option would be to export and reimport elsewhere (as explained above). 
+
+However, there is a REPL that PGlite provide's that let's you query directly in the browser. It's just a [React component (web component also available)](https://pglite.dev/docs/repl):
+
+```tsx
+import { Repl } from "@electric-sql/pglite-repl";
+
+...
+
+<Repl pg={client} />
+```
+
+There's even a [live demo of the REPL here](https://pglite.dev/repl/).
+
+### Gotcha #3 - You're at the mercy of dependencies
+When I was setting up what seemed to be a simple React component for the REPL, I got an error: 
+```
+Uncaught Error: No CodeMirror editor found
+```
+
+I raised an [issue on GitHub](https://github.com/electric-sql/pglite/issues/559) and [@ldirer](https://github.com/ldirer) found out it's related to a change in the CodeMirror dependency itself.
+
+If you're seeing this issue, the workaround at the time of writing is to override to an older version of React CodeMirror:
+```json
+  "overrides": {
+    "@uiw/react-codemirror": "4.23.5"
+  },
+```
 
 # Further reading
-TODO
+The repo with the [code can be found here](https://github.com/AdrianLThomas/pglite-spa): it shows most things discussed in this post.
 
-you can see the full repo here, with some additioanl things (suspense whilst db loads, REPL... etc)
-demo website here: ...
+You can also see a [live demo of the working code here](TODO)!
+TODO add link.
 
-feel free to discuss here or on linked in thanks.
+Thanks for reading!
+
 
 # TODOS, me only..
 - Remind myself & document in this guide why it's important:
