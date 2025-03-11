@@ -176,7 +176,7 @@ bun <span class="token function">add</span> -d drizzle-kit <span class="token co
 <span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre></div>
 <p><em>If you’re storing your data in IndexedDB then you’ll also want to query if the data has already been imported before doing so (to avoid doing so on each load!).</em></p>
 <h2>Import/Export alternative with PGlite</h2>
-<p>PGlite also supports exporting to a tarball with <a href="https://pglite.dev/docs/api#dumpdatadir">dumpDataDir</a>, and importing with <a href="https://pglite.dev/docs/api#options">loadDataDir</a>. Here you can provide an <a href="https://pglite.dev/examples/dump-data-dir">(example of both)</a></p>
+<p>PGlite also supports exporting to a tarball with <a href="https://pglite.dev/docs/api#dumpdatadir">dumpDataDir</a>, and importing with <a href="https://pglite.dev/docs/api#options">loadDataDir</a>. Here’s an <a href="https://pglite.dev/examples/dump-data-dir">(example of both)</a></p>
 <h1>SQL Client</h1>
 <p>You might be tempted to reach for your favourite Postgres client (and/or Drizzle Studio). Unfortunately you cannot use it (there’s no endpoint to connect to!).</p>
 <p>One option would be to export and re-import elsewhere to a server Postgres instance.</p>
