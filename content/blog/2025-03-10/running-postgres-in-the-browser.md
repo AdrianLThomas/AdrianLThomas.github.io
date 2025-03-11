@@ -257,8 +257,7 @@ If you're seeing this issue, the workaround at the time of writing is to overrid
 # Further reading
 The repo with the [code can be found here](https://github.com/AdrianLThomas/pglite-spa): it shows most things discussed in this post.
 
-You can also see a [live demo of the working code here](TODO)!
-TODO add link.
+You can also see a [live demo of the working code here](http://www.adrian-thomas.com/pglite-spa).
 
 Thanks for reading!
 
