@@ -1,14 +1,20 @@
 ---
-title: Running Postgres in the browser with PGlite and Drizzle
-date: "2025-03-10"
+title: Running Postgres 100% in the browser with PGlite and Drizzle
+date: "2025-03-11"
 description: You can run Postgres 100% in the browser client, I'll describe how, why and share some of the pros and cons of doing so.
 ---
 
-I've been playing around with [PGlite](https://pglite.dev/) ([Postgres](https://www.postgresql.org/) [WASM](https://developer.mozilla.org/en-US/docs/WebAssembly)), and it's pretty cool - you can run Postgres 100% in the browser client. There are some gotchas, so I'll run through how I got PGlite running with [Vite](https://vite.dev/) (React) and [Drizzle](https://orm.drizzle.team/) (ORM).
+# tl;dr 
+
+You can run Postgres 100% in the browser with PGlite. This post walks through setting it up with Vite (React), handling migrations in the client, and overcoming common pitfalls. Includes a working [demo](http://www.adrian-thomas.com/pglite-spa) and [GitHub repo](https://github.com/AdrianLThomas/pglite-spa).
+
+# Intro
+
+I've been playing around with [PGlite](https://pglite.dev/) ([Postgres](https://www.postgresql.org/) [WASM](https://developer.mozilla.org/en-US/docs/WebAssembly)), and it's pretty cool. There are some gotchas, so I'll run through how I got PGlite running with [Vite](https://vite.dev/) (React) and [Drizzle](https://orm.drizzle.team/) (ORM).
 
 # Getting setup
 
-Run the Vite scaffolder with your favourite package manager (I'll continue to use Bun, but feel free to use your own flavour)
+Run the Vite scaffolder with your favourite package manager (I'll continue to use Bun, but feel free to use npm/yarn/pnpm etc)
 ```bash
 bun create vite
 ```
@@ -72,10 +78,10 @@ export default App;
 We're using `idb://my-pgdata` when instantiating the client to use persistent browser storage. However there are also [other storage options](https://pglite.dev/docs/filesystems#filesystems) available.
 
 ## Types, schema & migrations with Drizzle 
-You can probably skip this part if you don't want / need to use an ORM and are happy with arbritrary SQL. However if you'd like types and the ability to migrate between schemas, please continue...
+You can probably skip this part if you don't want / need to use an ORM and are happy with arbitrary SQL. However if you'd like types and the ability to migrate between schemas, please continue...
 
 ```bash
-bun add drizzle-orm # Let's us define the schema and gives us types
+bun add drizzle-orm # Lets us define the schema and gives us types
 bun add -d drizzle-kit # Helpful for migrations
 ```
 
@@ -176,7 +182,7 @@ import { migrate } from "./migrate"
 migrate().then(renderApp);
 ```
 
-I've provided an example repo at the end of this post showing how I executed the migration wrapped in [Suspense](https://react.dev/reference/react/Suspense) so that a placeholder is shown during initalisation.
+I've provided an example repo at the end of this post showing how I executed the migration wrapped in [Suspense](https://react.dev/reference/react/Suspense) so that a placeholder is shown during initialisation.
 
 # Basic CRUD operations
 It's just Drizzle all the way forward now, there's a bunch of [documentation](https://orm.drizzle.team/docs/rqb), but here's some examples sticking with the TODO theme:
@@ -232,9 +238,9 @@ PGlite also supports exporting to a tarball with [dumpDataDir](https://pglite.de
 # SQL Client
 You might be tempted to reach for your favourite Postgres client (and/or Drizzle Studio). Unfortunately you cannot use it (there's no endpoint to connect to!).
 
-One option would be to export and reimport elsewhere (as explained above). 
+One option would be to export and re-import elsewhere to a server Postgres instance. 
 
-However, there is a REPL that PGlite provide's that let's you query directly in the browser. It's just a [React component (web component also available)](https://pglite.dev/docs/repl):
+However, there is a REPL that PGlite provides that let's you query directly in the browser. It's just a [React component (web component also available)](https://pglite.dev/docs/repl):
 
 ```tsx
 import { Repl } from "@electric-sql/pglite-repl";
@@ -267,9 +273,3 @@ The repo with the [code can be found here](https://github.com/AdrianLThomas/pgli
 You can also see a [live demo of the working code here](http://www.adrian-thomas.com/pglite-spa).
 
 Thanks for reading!
-
-
-# TODOS, me only..
-- Run through each step, sanity check I've not missed anything
-- Proof read
-- Fix links to always open externally - do this across blog...?
