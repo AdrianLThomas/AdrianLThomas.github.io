@@ -4,13 +4,9 @@ date: "2025-03-11"
 description: You can run Postgres 100% in the browser client, I'll describe how, why and share some of the pros and cons of doing so.
 ---
 
-# tl;dr 
+# tl;dr
 
-You can run Postgres 100% in the browser with PGlite. This post walks through setting it up with Vite (React), handling migrations in the client, and overcoming common pitfalls. Includes a working [demo](http://www.adrian-thomas.com/pglite-spa) and [GitHub repo](https://github.com/AdrianLThomas/pglite-spa).
-
-# Intro
-
-I've been playing around with [PGlite](https://pglite.dev/) ([Postgres](https://www.postgresql.org/) [WASM](https://developer.mozilla.org/en-US/docs/WebAssembly)), and it's pretty cool. There are some gotchas, so I'll run through how I got PGlite running with [Vite](https://vite.dev/) (React) and [Drizzle](https://orm.drizzle.team/) (ORM).
+I've been playing around with [PGlite](https://pglite.dev/) ([Postgres](https://www.postgresql.org/) [WASM](https://developer.mozilla.org/en-US/docs/WebAssembly)), and it's pretty cool. There are some gotchas, so I'll run through how I got PGlite running with [Vite](https://vite.dev/) (React) and [Drizzle](https://orm.drizzle.team/) (ORM). There's a working [demo](http://www.adrian-thomas.com/pglite-spa) and [GitHub repo](https://github.com/AdrianLThomas/pglite-spa) at the end too.
 
 # Getting setup
 
