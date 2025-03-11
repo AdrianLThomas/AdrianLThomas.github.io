@@ -142,7 +142,7 @@ console.log("Migrations compiled!");
 
 We now have a `migrations.json` file that can be used in the browser.
 
-🚨 _Unfortunately, as it's undocumented, the Drizzle team could change and break at any point in time. Unfortunately if you want to use Drizzle in the browser then there is no alternative at the time of writing._
+🚨 _Unfortunately, as the functions are undocumented, the Drizzle team could break them any point in time. Unfortunately if you want to use Drizzle in the browser then there is no alternative at the time of writing._
 
 ### Executing the migration
 Setup the migration:
@@ -164,7 +164,6 @@ export async function migrate() {
 and simply execute the exported `migrate` function, e.g.
 ```tsx
 // root.ts
-
 import { migrate } from "./migrate"
 
 migrate().then(renderApp);
@@ -198,18 +197,43 @@ export async function deleteTodoAction(formData: FormData) {
 }
 ```
 
-# Further reading
-## Getting data in and out
-pgdump
-csv import (can go in and out, link examples)
+# Getting data in and out
+There's a number of options depending on what the use-case is, but I'll describe an approach I took. If you just want test data, you can use [drizzle-seed](https://orm.drizzle.team/docs/seed-overview).
 
-## SQL Client
+## CSV
+One option to import data is with a CSV. Given it's running in the browser, you need to be able to obtain the CSV as a blob. This is then mapped to [PGlite's virtual device](https://pglite.dev/docs/api#dev-blob) `/dev/blob`, and then you can just copy the data like you ordinarily would:
+
+```typescript
+// example depicting the copying of citizen data from a CSV in to the citizens table.
+
+const csvResponse = await fetch('/smart_city_citizen_activity.csv');
+await client.query(`
+  COPY citizens(id, age, gender, mode_of_transport)
+  FROM '/dev/blob'
+  DELIMITER ','
+  CSV HEADER;
+  `, [], {
+  blob: await csvResponse.blob()
+})
+```
+
+If you're storing your data in IndexedDB then you'll also want to query if the data has already been imported before doing so (to avoid doing so on each load!).
+
+## pgdump
+
+### Data in
+
+### Data out
+
+
+# SQL Client
 ... TODO ... can't use the usual suspects
  but there is a repl...
  gotcha 3!! it's broken at time of writing - but maybe not today? check.
 
 
-# later...
+# Further reading
+TODO
 
 you can see the full repo here, with some additioanl things (suspense whilst db loads, REPL... etc)
 demo website here: ...
