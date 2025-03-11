@@ -209,7 +209,7 @@ export async function deleteTodoAction(formData: FormData) {
 # Getting data in and out
 There's a number of options depending on what the use-case is, but I'll describe an approach I took. If you just want test data, you can use [drizzle-seed](https://orm.drizzle.team/docs/seed-overview).
 
-## CSV
+## CSV Import
 One option to import data is with a CSV. Given it's running in the browser, you need to be able to obtain the CSV as a blob. This is then mapped to [PGlite's virtual device](https://pglite.dev/docs/api#dev-blob) `/dev/blob`, and then you can just copy the data like you ordinarily would with SQL:
 
 ```typescript
@@ -228,7 +228,7 @@ await client.query(`
 
 _If you're storing your data in IndexedDB then you'll also want to query if the data has already been imported before doing so (to avoid doing so on each load!)._
 
-## Alternatives
+## Import/Export alternative with PGlite
 PGlite also supports exporting to a tarball with [dumpDataDir](https://pglite.dev/docs/api#dumpdatadir), and importing with [loadDataDir](https://pglite.dev/docs/api#options). Here you can provide an [(example of both)](https://pglite.dev/examples/dump-data-dir)
 
 # SQL Client
