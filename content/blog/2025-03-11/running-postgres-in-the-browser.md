@@ -1,7 +1,7 @@
 ---
 title: Running Postgres 100% in the browser with PGlite and Drizzle
 date: "2025-03-11"
-description: You can run Postgres 100% in the browser client, I'll describe how, why and share some of the pros and cons of doing so.
+description: I've been playing around with PGlite, and it's pretty cool. There are some gotchas, so I'll run through how I got PGlite running with Vite and Drizzle. There's a working demo and GitHub repo at the end too.
 ---
 
 # tl;dr
