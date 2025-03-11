@@ -20,7 +20,14 @@ bun add @electric-sql/pglite
 ```
 
 ## Gotcha #1 - Exclude PGlite from the bundle
-Some bundlers (like Vite and Next.js) struggle with PGlite, so we need to [exclude it from the Vite](https://pglite.dev/docs/bundler-support#vite) bundle, otherwise it will error.
+Some bundlers (like Vite and Next.js) struggle with PGlite, and it will error with something like:
+
+```
+Uncaught Error: Invalid FS bundle size: 723 !== 5401749
+```
+
+so [exclude it from optimisation](https://pglite.dev/docs/bundler-support#vite):
+
 ```typescript
 // vite.config.ts
 import { defineConfig } from "vite";
@@ -72,7 +79,7 @@ bun add drizzle-orm # Let's us define the schema and gives us types
 bun add -d drizzle-kit # Helpful for migrations
 ```
 
-You can then [create a schema with Drizzle](https://orm.drizzle.team/docs/sql-schema-declaration). For this example let's just create a simple TODO app:
+You can then [create a schema with Drizzle](https://orm.drizzle.team/docs/sql-schema-declaration). For this example let's just create a simple TODO table:
 
 ```typescript
 /// src/app/db/schema.ts
@@ -254,7 +261,7 @@ If you're seeing this issue, the workaround at the time of writing is to overrid
   },
 ```
 
-# Further reading
+# Code & Demo
 The repo with the [code can be found here](https://github.com/AdrianLThomas/pglite-spa): it shows most things discussed in this post.
 
 You can also see a [live demo of the working code here](http://www.adrian-thomas.com/pglite-spa).
@@ -263,9 +270,6 @@ Thanks for reading!
 
 
 # TODOS, me only..
-- Remind myself & document in this guide why it's important:
-    -   driver: "pglite", produces an error without it.... what is it?
-    - what's the error when:     exclude: ["@electric-sql/pglite"], is not excluded?
 - Run through each step, sanity check I've not missed anything
 - Proof read
 - Fix links to always open externally - do this across blog...?
