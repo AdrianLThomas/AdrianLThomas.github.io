@@ -161,7 +161,7 @@ bun <span class="token function">add</span> -d drizzle-kit <span class="token co
 <span class="token punctuation">}</span></code></pre></div>
 <h1>Getting data in and out</h1>
 <p>There’s a number of options depending on what the use-case is, but I’ll describe an approach I took. If you just want test data, you can use <a href="https://orm.drizzle.team/docs/seed-overview">drizzle-seed</a>.</p>
-<h2>CSV</h2>
+<h2>CSV Import</h2>
 <p>One option to import data is with a CSV. Given it’s running in the browser, you need to be able to obtain the CSV as a blob. This is then mapped to <a href="https://pglite.dev/docs/api#dev-blob">PGlite’s virtual device</a> <code class="language-text">/dev/blob</code>, and then you can just copy the data like you ordinarily would with SQL:</p>
 <div class="gatsby-highlight" data-language="typescript"><pre class="language-typescript"><code class="language-typescript"><span class="token comment">// example depicting the copying of citizen data from a CSV in to the citizens table.</span>
 
@@ -175,7 +175,7 @@ bun <span class="token function">add</span> -d drizzle-kit <span class="token co
   blob<span class="token operator">:</span> <span class="token keyword">await</span> csvResponse<span class="token punctuation">.</span><span class="token function">blob</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre></div>
 <p><em>If you’re storing your data in IndexedDB then you’ll also want to query if the data has already been imported before doing so (to avoid doing so on each load!).</em></p>
-<h2>Alternatives</h2>
+<h2>Import/Export alternative with PGlite</h2>
 <p>PGlite also supports exporting to a tarball with <a href="https://pglite.dev/docs/api#dumpdatadir">dumpDataDir</a>, and importing with <a href="https://pglite.dev/docs/api#options">loadDataDir</a>. Here you can provide an <a href="https://pglite.dev/examples/dump-data-dir">(example of both)</a></p>
 <h1>SQL Client</h1>
 <p>You might be tempted to reach for your favourite Postgres client (and/or Drizzle Studio). Unfortunately you cannot use it (there’s no endpoint to connect to!).</p>
