@@ -1,6 +1,6 @@
 ---
 title: Running Postgres 100% in the browser with PGlite and Drizzle
-date: "2025-03-11"
+date: "2025-03-10"
 description: You can run Postgres 100% in the browser client, I'll describe how, why and share some of the pros and cons of doing so.
 ---
 
