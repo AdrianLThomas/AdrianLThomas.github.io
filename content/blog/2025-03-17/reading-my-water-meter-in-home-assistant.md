@@ -98,7 +98,7 @@ Finally, you need to configure some private variables as part of the build:
 #define GDO0 5 //header 11 
 ```
 
-We've not set up MQTT yet, more on this soon - so just come back to this config file once you're ready.
+We've not set up MQTT yet, more on this below - so just come back to this config file once you're ready.
 
 # Problem 2: Finding the right frequency
 OK so now we can compile the code, we need to find the correct frequency. I mentioned before the transceiver works on 433MHz, but you need to calibrate it to work on the EXACT frequency to be a little lower/higher against your meter.
