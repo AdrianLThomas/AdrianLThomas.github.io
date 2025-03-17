@@ -1,4 +1,345 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Adrian L Thomas]]></title><description><![CDATA[Pizza, programming and cars - sometimes in that order.]]></description><link>https://www.adrian-thomas.com</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 11 Mar 2025 21:02:11 GMT</lastBuildDate><item><title><![CDATA[Running Postgres 100% in the browser with PGlite and Drizzle]]></title><description><![CDATA[tl;dr I’ve been playing around with PGlite (Postgres WASM), and it’s pretty cool. There are some gotchas, so I’ll run through how I got…]]></description><link>https://www.adrian-thomas.com/blog/2025-03-11/running-postgres-in-the-browser/</link><guid isPermaLink="false">https://www.adrian-thomas.com/blog/2025-03-11/running-postgres-in-the-browser/</guid><pubDate>Tue, 11 Mar 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;tl;dr&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Adrian L Thomas]]></title><description><![CDATA[Pizza, programming and cars - sometimes in that order.]]></description><link>https://www.adrian-thomas.com</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 17 Mar 2025 16:59:33 GMT</lastBuildDate><item><title><![CDATA[Reading my water meter in Home Assistant]]></title><description><![CDATA[Water bills in the UK are going up, again, and I thought it would be nice to keep a closer eye on the household usage by integrating the…]]></description><link>https://www.adrian-thomas.com/blog/2025-03-17/reading-my-water-meter-in-home-assistant/</link><guid isPermaLink="false">https://www.adrian-thomas.com/blog/2025-03-17/reading-my-water-meter-in-home-assistant/</guid><pubDate>Mon, 17 Mar 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Water bills in the UK &lt;a href=&quot;https://www.bbc.co.uk/news/articles/c5yd9qzx79go&quot;&gt;are going up, again&lt;/a&gt;, and I thought it would be nice to keep a closer eye on the household usage by integrating the water meter in to &lt;a href=&quot;https://www.home-assistant.io/&quot;&gt;Home Assistant&lt;/a&gt;.&lt;/p&gt;
+&lt;h1&gt;What I wanted to do&lt;/h1&gt;
+&lt;p&gt;I wanted the water meter readings in Home Assistant so perhaps I could set up alerts and generally try to reduce how much water was being used (and identify when/where it gets used the most).&lt;/p&gt;
+&lt;h2&gt;Setting up HA (Home Assistant)&lt;/h2&gt;
+&lt;p&gt;I already had Home Assistant set up, but it’s simple enough to get started if you’re already self hosting things &lt;a href=&quot;https://www.home-assistant.io/installation/linux#docker-compose&quot;&gt;with Docker&lt;/a&gt; (e.g. homelab, raspberry pi or an off the shelf device). There’s quite a &lt;a href=&quot;https://www.home-assistant.io/installation/&quot;&gt;few options available&lt;/a&gt;.&lt;/p&gt;
+&lt;h1&gt;The Solution&lt;/h1&gt;
+&lt;p&gt;The solution for you could well differ from mine, there’s a ton of &lt;a href=&quot;https://www.home-assistant.io/docs/energy/water/&quot;&gt;options documented to read your water meter&lt;/a&gt;, but in my case I had an Irton EverBlu Cyble water meter, that as far as I know is fairly common in the UK. So the first step would be identify what you have so that you can work out how to read it.&lt;/p&gt;
+&lt;p&gt;I came &lt;a href=&quot;https://community.home-assistant.io/t/reading-itron-everblu-cyble-rf-enhanced-water-meter-with-esp32-esp8266-and-433mhz-cc1101-home-assistant-mqtt-autodiscovery/833180&quot;&gt;across this post on the HA forum&lt;/a&gt; describing a solution for reading my meter using a 433MHz transceiver (the same way the water company reads the meter from the van outside your house).&lt;/p&gt;
+&lt;p&gt;I already had some spare ESP8266’s around, so just needed a CC1101 transceiver which only cost a few quid off Amazon.&lt;/p&gt;
+&lt;h2&gt;ESP.. what?&lt;/h2&gt;
+&lt;p&gt;The ESP8266 is a very cheap microcontroller (as in only a few pounds), with built in WiFi.&lt;/p&gt;
+&lt;p&gt;They’re not very powerful (80-160MHz), but for most IoT projects they don’t need to be. If you’ve ever used an Arduino or used the SPI pins on a Raspberry Pi, you’ll feel right at home.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a092bc88a280b8738e2218978499186f/29114/esp8266.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 66.45569620253164%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAAsTAAALEwEAmpwYAAADW0lEQVQ4yz2Q209bBRzHz5/gw14EyyCbAV3GaJBqAkMYrFwsaxGMEViwGZBNszkyZdwGzGDHZUCht9PL6WnP6Tmnpz29UDpn9MEXfTM++KBPmphooib+DR/Tmuzh8/r5fn4/oXRapVx5RqF4SuXsOdUvv6FaKeLf3eDe3Ts8Wl+lVK5QrX5FqVR5gWWVyOUL5HIFdCOHppsoqoZQLJ9RLFcolirkrDLhk32+NnwYcR/ffVshdLjJ/NyHmPkCZ9XnWIVSfTxvFcmaecycha6baFoWRdEQCrW14ilWscz6xjrX+rrZ2fiYP377kX//+pm/f/8BUz1h7tYMiqrWpbWymlA3zLo0oxmoqk4qpSLkCmXMXKEu9e3u4nINc8PZxecrC/zz50/8+sv3PFpawD3ah+ddN4FQkNOzZ3WRZpgY2RxqxkBRdWS5JrTK6KZFNl9E0U0Gr1/D6RxkqK+T+ZseerodnDv3ElNT7+HxjDEw2M/e/l797zWRqhmkVZ2krCIlFQTTKqFla2s5pFSGqekZmpubGBoeoqfrCh8Md+KdHsduv4Lb7cI19g5djjdYXVutV9bKaiSTCpKkIGimhaJlSak68WSapeU1HI43sTXZGHEOMDNi5/3xUSYmJ7Hb27n46gVGRod5u7eb5YefoWomcipDPJEiGpMR9KyFkjFIZ/S6NBAMc++TRTo7O2loeJmevgFcbjcTE+N0dLTj9c6QSARxjTpZXVt7cW48niIWSyFkjDzJlEo683+lGJN4enDEnY/ucvlyO83nbfT39+FyuVj69D6+7XW2NpfxeNzsH/gJiwliiTSimCQiSggZzSQpK6hatk5CkgmFRPb2D5ibv01raystLU10Obro6+3m0mut2Gw2eq9eZWVlDf9xqH5qJCIRDMUQkmmdaFxGVgxkRScWlwlHYpwEImx/scP0zCxtbW2cb2rAZmvklcZGLl5o4cbYGJtb2xwcBgiFE3UCgSiCouhIUopMJouqGiSlNIm4TCwqEQxE8G3v4J29xVsOB+2XXsfe0c6w8zqL9xd5un/MyXGEYDCGGJEIBEQEUUwQCIrIaYOknCEciRMMioSCUfxHQXaf7LGxvsXC/G0mJybwznp58OAhjx/7ODwK4T8WOT6JEggleLLr5z9HrZVt5gvYhgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;a picture of an ESP8266&quot;
+        title=&quot;ESP8266&quot;
+        src=&quot;/static/a092bc88a280b8738e2218978499186f/f058b/esp8266.png&quot;
+        srcset=&quot;/static/a092bc88a280b8738e2218978499186f/c26ae/esp8266.png 158w,
+/static/a092bc88a280b8738e2218978499186f/6bdcf/esp8266.png 315w,
+/static/a092bc88a280b8738e2218978499186f/f058b/esp8266.png 630w,
+/static/a092bc88a280b8738e2218978499186f/40601/esp8266.png 945w,
+/static/a092bc88a280b8738e2218978499186f/78612/esp8266.png 1260w,
+/static/a092bc88a280b8738e2218978499186f/29114/esp8266.png 1920w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h2&gt;CC1.. what?&lt;/h2&gt;
+&lt;p&gt;I didn’t know much about the CC1101 until recently either. It’s described as a low-cost sub-1 GHz transceiver designed for very low-power wireless applications.&lt;/p&gt;
+&lt;p&gt;Basically, you can use it to wirelessly read data from your meter.&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/7fb6c970300cc3c1966716930447de4c/73caa/cc1101.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 69.62025316455697%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsTAAALEwEAmpwYAAADQElEQVQ4y2WT70+TVxiG+we4Dzg1EraoiWFxmTJISBY+EGEd26omUzM1mcFlZFMww8GCdAWsVAGVKBARtBOwP3Q6ZlwLImDmJiDSlrlhZ0SdKGIpRNE6aIvt+76Xabu3dNmdnJwP55wr93nu51EQkiQhSVJ0Dy1RDC0xdEisZgV4PDVDm/0ehy0Ovqi10nbNGT4TRBFFhPfvI0mGzEmQ4NmMH+cDN90DTnr6rlFrtLK29DSZ+UdR5VbxdVUzT15Mh+8rpBhXMng2EOSv0Sn+Hhnhcr+N5gsWNuua+eZAC0fq9OzU1vOl7ns+KqwnY2sRWV9VYmi/KgNjHUl0226wTd+Pau9P9NiuM+sZ41OdkcTtenT1Z/hwx0HeTl1N2ntprMrWkZ5XzbrcCr6tNuF+8jzy5WAgwEu/F6/Hxd3Bc+yvOcKOksOs1Rg4cNJKltrM+vIzaGuaUVcbUH68gfRMFamf7SGnwsSaghrSik+Re7wdxdOxQabuW3jx0Mo/7gEmhy9iOFZOwXc6ciubUBUbyK82U1hzHmWxkQ3l59i2t4WcfS0k5ul5X9PClkOn0ZraaR/4A8Wjvipu/VpL/4+76TQU0tpQwM+nSjAfLafs0DHWl55gfOwOvXYHb23X80ZOI2vKjFSYO7D0OLg16gIpGIovUsP7vY30ni3E0VbGI+d5ZsYHsF85ySeaBt7deZxMjZnfbHau223UtXbROzTMtM8brbpvehq743f2Vx7EYr2I4qX3OYLPDdJspE0EETHgpe6Sg1LTZVqv3sA58pigIIcnMnz7DmbzD+TnF6BSrWPlyiQWL45nxYp3IqFEMxbFaOuIwlz6k+5xurq62aPVsXHjJlJSUlm6dBkLFiwiLm4+8fEJJCensLtILffhHCikgH8KRBdGQxObNm8lPT2D5csTSUh4k7i418OgJUuWoVRmoVZr6OzsZGJiIlLD2EkRhSBPH/bhGb2A524ju3I+YN5r81m4cFHYRVJSMtnZn9PQ0MjQ0E38fv9/pkqMHT0ZOnHTzC9ni2jSKtHmrSYjM4uSklI6Oi5FXcQqGAwiCEIYFmJEayhPjMf1J/dsJm4PdjDpGsHn+7+LEEQGyEbk/RVlVHdokwvwbAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;a picture of the CC1101 transceiver that operates at 433MHz&quot;
+        title=&quot;CC1101 transceiver - 433MHz&quot;
+        src=&quot;/static/7fb6c970300cc3c1966716930447de4c/f058b/cc1101.png&quot;
+        srcset=&quot;/static/7fb6c970300cc3c1966716930447de4c/c26ae/cc1101.png 158w,
+/static/7fb6c970300cc3c1966716930447de4c/6bdcf/cc1101.png 315w,
+/static/7fb6c970300cc3c1966716930447de4c/f058b/cc1101.png 630w,
+/static/7fb6c970300cc3c1966716930447de4c/40601/cc1101.png 945w,
+/static/7fb6c970300cc3c1966716930447de4c/73caa/cc1101.png 1110w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h2&gt;MQTT&lt;/h2&gt;
+&lt;p&gt;We’ll be using &lt;a href=&quot;https://mqtt.org/&quot;&gt;MQTT&lt;/a&gt; for this. It is a lightweight message queue, commonly used for IoT. We can publish the state of the water meter to it, and Home Assistant will subscribe to these updates accordingly.&lt;/p&gt;
+&lt;h1&gt;Getting started&lt;/h1&gt;
+&lt;p&gt;So if you want to follow along, I’m making the following assumptions:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;You have the same water meter as me&lt;/li&gt;
+&lt;li&gt;You have Home Assistant set up and running&lt;/li&gt;
+&lt;li&gt;You have an ESP8266&lt;/li&gt;
+&lt;li&gt;You have a CC1101&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;Wiring up the CC1101 to the ESP8266&lt;/h1&gt;
+&lt;p&gt;When you buy a component like the CC1101 you normally get a pin out diagram, either from the manufacturer or you can find one online, that looks something like this:
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/f9ad159960a5ce7135e74808de42eeec/d7542/cc1101-pinout.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 94.9367088607595%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAYAAACQjC21AAAACXBIWXMAAAsTAAALEwEAmpwYAAADeklEQVQ4y42S229UVRSH5z8x0UexfeBRookomhiBhsIDiZo0Jj7oixHx3fgiGmLBXuiF0kZaK1q1NcSodNoZKYkQIBa0l6mZmTM9cylzbjNz7mc+s850aqFqXMnK3vuc3/r2b+29E91HnuTrry6wdP0HUotzpFJzLCzMMn9thuT8N6QWZ0ktfsfiwrck52dIp2b5JT1HOj0X60W7uDBLOvU9lz/vJ3G8qwNFyfBolCsm5bKJ57fWfgCa7vFfoWkGie6uTjKZ5fiD5zlUq1XKJZWt/MdUlVNUldNoyrtohVPom6epKu+hKW9TUT7DdSPCwMN1HBzbjhkxcGPj3vYeTR48qJLLrlNXX8MtvYxffgb0faB3grUPrE7QH6deehMnalVFUROtWsVzPQE+RSZzj2YTTEPH83x0vYKh9GAXD+MUD1HP7qe0eoA/bj/P73deQl15muXkUTLXh7g6+QGVYg7bdmKnieMC3HZomYaYxHNq6EoPjeJhbPVFln49wvTVV5meOcGPPx9j9e5z3PzyAMtDPUy8/wrF7Cq27baA3V0dOy2HQUAzbOI0DMzCSdziC6ysHWVl7SDJW93cufssxVwHbD1B8c/XqbvSLgR+gK5p+J5P4sSx/eTya60TjJqxwyDwqZUvoFXOoKq9lIofklwe5Pb9d1hZf4tN5Q20rfGHbjgMWgeaOHTwMW7c+ImtrRKqmqdYVCgU8mRzKtl8iY18mSs3C0wnl5hLX+HarRnur/9GLqeyWcjGNepmnlKpQLlUIDEy/BFTk/1MTQ4wPHKW0YvnGB7tZWS0l4tj5xgcOkv/8Kf0DZxhYOgTxsbOMzE+yKVLfYyP9zExfp7JywN8MTUYZ2K3bcuq0Wg41OsN6rUGQRBiGCa+62HoJrpuEvhh/BJ8P8D3Q1zXf6j1RBgGRFGIjE15O4Dj2IRhuLOW//Lga7Ua9bpkHcsysSwL0zTxPI8oimJd4u+iaAfiOE7sTtZBEBCFYQyTYkmr1oKKrtFoxLr4UpvNvUAJEQlIdpa5aNrA2rYr3/dj/e5O/hXoum68FqBkGyhtijPbtuNRUjYU7V7g9m4SUvAoUM7LMIwY3Aa04x8dhruAtV1nJHDRSJu6rqNpWuyq3ZXk/wIKSIAyF424E5ikzNtn1849QBnFlTiRgvaTaM/FnaRhiEu9dduWFV/ebuBfy1Je2bLknisAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;a diagram of the CC1101 pinout&quot;
+        title=&quot;CC1101 pin out&quot;
+        src=&quot;/static/f9ad159960a5ce7135e74808de42eeec/f058b/cc1101-pinout.png&quot;
+        srcset=&quot;/static/f9ad159960a5ce7135e74808de42eeec/c26ae/cc1101-pinout.png 158w,
+/static/f9ad159960a5ce7135e74808de42eeec/6bdcf/cc1101-pinout.png 315w,
+/static/f9ad159960a5ce7135e74808de42eeec/f058b/cc1101-pinout.png 630w,
+/static/f9ad159960a5ce7135e74808de42eeec/d7542/cc1101-pinout.png 810w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The code we’re going to use provided this mapping table; so attach the CC1101 accordingly:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;strong&gt;CC1101&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;ESP8266&lt;/strong&gt;&lt;/th&gt;
+&lt;th&gt;&lt;strong&gt;Notes&lt;/strong&gt;&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;VCC&lt;/td&gt;
+&lt;td&gt;3V3&lt;/td&gt;
+&lt;td&gt;Connect to the 3.3V power pin.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GDO0&lt;/td&gt;
+&lt;td&gt;D1&lt;/td&gt;
+&lt;td&gt;General-purpose digital output.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;CSN&lt;/td&gt;
+&lt;td&gt;D8&lt;/td&gt;
+&lt;td&gt;SPI chip select; Feather has GPIO15 as CS.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;SCK&lt;/td&gt;
+&lt;td&gt;D5&lt;/td&gt;
+&lt;td&gt;SPI clock pin; SPI SCK maps to GPIO14.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;MOSI&lt;/td&gt;
+&lt;td&gt;D7&lt;/td&gt;
+&lt;td&gt;SPI MOSI pin; maps to GPIO13 on the Feather.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GDO1 (MISO)&lt;/td&gt;
+&lt;td&gt;D6&lt;/td&gt;
+&lt;td&gt;SPI MISO pin; maps to GPIO12 on the Feather.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GDO2&lt;/td&gt;
+&lt;td&gt;D2&lt;/td&gt;
+&lt;td&gt;Another general-purpose digital output.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;GND&lt;/td&gt;
+&lt;td&gt;G&lt;/td&gt;
+&lt;td&gt;Connect to ground.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;em&gt;The original table can be found in the source repository &lt;code class=&quot;language-text&quot;&gt;README.md&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;You should then end up with something like this:
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/641670381f7044dc246af484b1b3d2e8/2c3a2/esp8266-wired-up.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 104.43037974683544%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAVABQDASIAAhEBAxEB/8QAGQABAAIDAAAAAAAAAAAAAAAAAAEDBAUG/8QAFQEBAQAAAAAAAAAAAAAAAAAAAQL/2gAMAwEAAhADEAAAAcFdA1IJ0FYVrBUf/8QAHhAAAQMEAwAAAAAAAAAAAAAAAQACAwQQERMSIjH/2gAIAQEAAQUCXltEi0uCd1OEYQ41LeEn/8QAFBEBAAAAAAAAAAAAAAAAAAAAIP/aAAgBAwEBPwEf/8QAFBEBAAAAAAAAAAAAAAAAAAAAIP/aAAgBAgEBPwEf/8QAGxAAAgIDAQAAAAAAAAAAAAAAABEBEAIxYZH/2gAIAQEABj8CvRM5L22xcP/EABoQAQADAQEBAAAAAAAAAAAAAAEAETEhQRD/2gAIAQEAAT8huPVO/B7oWZ2Yw9YwPpcKxAl3yARp1k//2gAMAwEAAgADAAAAECjvgv/EABgRAAMBAQAAAAAAAAAAAAAAAAABMRAR/9oACAEDAQE/EHc4h0//xAAXEQADAQAAAAAAAAAAAAAAAAAAARAR/9oACAECAQE/EEZEf//EABsQAQADAAMBAAAAAAAAAAAAAAEAESExQVFh/9oACAEBAAE/EC2GvUb0XE+wWtYK0cQNX9YowRrqXLxFeQbg55DoynDCpSKJsntZ/9k=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;esp8266 wired up to a cc1101&quot;
+        title=&quot;esp8266 wired up to a cc1101&quot;
+        src=&quot;/static/641670381f7044dc246af484b1b3d2e8/828fb/esp8266-wired-up.jpg&quot;
+        srcset=&quot;/static/641670381f7044dc246af484b1b3d2e8/ff44c/esp8266-wired-up.jpg 158w,
+/static/641670381f7044dc246af484b1b3d2e8/a6688/esp8266-wired-up.jpg 315w,
+/static/641670381f7044dc246af484b1b3d2e8/828fb/esp8266-wired-up.jpg 630w,
+/static/641670381f7044dc246af484b1b3d2e8/0ede0/esp8266-wired-up.jpg 945w,
+/static/641670381f7044dc246af484b1b3d2e8/3ac88/esp8266-wired-up.jpg 1260w,
+/static/641670381f7044dc246af484b1b3d2e8/2c3a2/esp8266-wired-up.jpg 1402w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h1&gt;Problem 1: How do we compile this thing?&lt;/h1&gt;
+&lt;p&gt;OK so going back to the original forum post, the code takes us to &lt;a href=&quot;https://github.com/genestealer/everblu-meters-esp8266-improved&quot;&gt;this repository&lt;/a&gt; that is a fork of some older code. I had some issues (documentation and code changes), so of course I forked the fork, and you can &lt;a href=&quot;https://github.com/AdrianLThomas/everblu-meters-esp8266-improved&quot;&gt;find it here&lt;/a&gt;. This fork will remain the basis of what I refer to for the rest of the blog post.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;I raised a PR for the original maintainer, but at the time of writing it hasn’t yet been merged.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Previously when tinkering with the ESP8266 I just used the Arduino IDE - it’s fairly straightforward to get up and running. You write some C, compile, upload, and away you go. I’d also used &lt;a href=&quot;https://esphome.io/&quot;&gt;ESPHome&lt;/a&gt; which is a really nice declarative way to wire up components just using YAML.&lt;/p&gt;
+&lt;p&gt;However this project wasn’t using either, but I did spot there was a &lt;code class=&quot;language-text&quot;&gt;platformio.ini&lt;/code&gt; file. That means this repo is a &lt;a href=&quot;https://platformio.org/&quot;&gt;PlatformIO&lt;/a&gt; project: effectively a VS Code extension to compile, debug, test and upload code to various IoT devices. It’s new to me but looks pretty nice, and I look forward to trying it out more in the future.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Setting up VSCode and PlatformIO are straightforward so I’ll leave Google to handle that for you.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Finally, you need to configure some private variables as part of the build:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;c&quot;&gt;&lt;pre class=&quot;language-c&quot;&gt;&lt;code class=&quot;language-c&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;/// Private.h&lt;/span&gt;
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;secret_wifi_ssid&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;your wifi ssid&quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;secret_wifi_password&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;your wifi password&quot;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;secret_mqtt_server&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;ip of your mqtt server&quot;&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;secret_clientName&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;whatever unique client name you want to use&quot;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;secret_mqtt_username&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;your mqtt user&quot;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// or leave blank if not using&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;secret_mqtt_password&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;your mqtt pass&quot;&lt;/span&gt; &lt;span class=&quot;token comment&quot;&gt;// or leave blank if not using&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;secret_local_timeclock_server&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;pool.ntp.org&quot;&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;// Change these define according to your hardware&lt;/span&gt;
+
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;METER_YEAR&lt;/span&gt; &lt;span class=&quot;token expression&quot;&gt;&lt;span class=&quot;token number&quot;&gt;20&lt;/span&gt; &lt;/span&gt;&lt;span class=&quot;token comment&quot;&gt;// last two digits (e.g. 2019 is 19)&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;METER_SERIAL&lt;/span&gt; &lt;span class=&quot;token expression&quot;&gt;&lt;span class=&quot;token number&quot;&gt;123456&lt;/span&gt; &lt;/span&gt;&lt;span class=&quot;token comment&quot;&gt;// your 6 digit serial&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;FREQUENCY&lt;/span&gt; &lt;span class=&quot;token expression&quot;&gt;&lt;span class=&quot;token number&quot;&gt;433.700007&lt;/span&gt; &lt;/span&gt;&lt;span class=&quot;token comment&quot;&gt;// you can test for this using the test code in everblu-meters-esp8266.cpp&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token macro property&quot;&gt;&lt;span class=&quot;token directive-hash&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;token directive keyword&quot;&gt;define&lt;/span&gt; &lt;span class=&quot;token macro-name&quot;&gt;GDO0&lt;/span&gt; &lt;span class=&quot;token expression&quot;&gt;&lt;span class=&quot;token number&quot;&gt;5&lt;/span&gt; &lt;/span&gt;&lt;span class=&quot;token comment&quot;&gt;//header 11 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We’ve not set up MQTT yet. More on this below - just come back to this config file once you’re ready.&lt;/p&gt;
+&lt;h1&gt;Problem 2: Finding the right frequency&lt;/h1&gt;
+&lt;p&gt;OK so now we can compile the code, we need to find the correct frequency. I mentioned before the transceiver works on 433MHz, but you need to calibrate it to work on the EXACT frequency to be a little lower/higher against your meter.&lt;/p&gt;
+&lt;p&gt;I’ll defer this step back to the &lt;a href=&quot;https://github.com/AdrianLThomas/everblu-meters-esp8266-improved?tab=readme-ov-file#frequency-adjustment&quot;&gt;repo instructions&lt;/a&gt;, but effectively there are some debug statements that you can uncomment that will write out to the serial monitor. Once you’ve found the correct one you can update your configuration accordingly (as per the snippet in the previous section).&lt;/p&gt;
+&lt;h1&gt;Problem 3: Setting up MQTT&lt;/h1&gt;
+&lt;p&gt;I’ll also gloss over this step too, but for me this was just a simple case of adding another container to my Docker Compose setup. I used &lt;a href=&quot;https://hub.docker.com/_/eclipse-mosquitto&quot;&gt;Eclipse Mosquitto&lt;/a&gt;:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;yaml&quot;&gt;&lt;pre class=&quot;language-yaml&quot;&gt;&lt;code class=&quot;language-yaml&quot;&gt;&lt;span class=&quot;token key atrule&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token key atrule&quot;&gt;mosquitto&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; eclipse&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;mosquitto&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;latest
+    &lt;span class=&quot;token key atrule&quot;&gt;container_name&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; mosquitto
+    &lt;span class=&quot;token key atrule&quot;&gt;restart&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; unless&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;stopped
+    &lt;span class=&quot;token key atrule&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;1883:1883&quot;&lt;/span&gt;
+    &lt;span class=&quot;token key atrule&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; /your&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;config&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;path/mosquitto/config&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;/mosquitto/config
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; /your&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;config&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;path/mosquitto/data&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;/mosquitto/data
+      &lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt; /your&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;config&lt;span class=&quot;token punctuation&quot;&gt;-&lt;/span&gt;path/mosquitto/log&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;/mosquitto/log&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h1&gt;Problem 4: Device not being auto discovered in HA&lt;/h1&gt;
+&lt;p&gt;The final issue I ran into was that the device was not being detected by HA.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;When connecting to the serial monitor, the device was connecting to the meter OK and outputting the data&lt;/li&gt;
+&lt;li&gt;I could see that the ESP8266 had an IP address, so it must be connecting to the wifi fine&lt;/li&gt;
+&lt;li&gt;Viewing the Mosquitto container logs showed that messages were being received as expected from the esp8266&lt;/li&gt;
+&lt;li&gt;Manually subscribing to all topics (&lt;code class=&quot;language-text&quot;&gt;#&lt;/code&gt;) in HA showed that messages were being received correctly&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;..yet no device appeared in HA&lt;/p&gt;
+&lt;p&gt;I enabled ‘debug logging’ for MQTT in HA:&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/cbe0410e4869f1e4c6e99309f0770fad/2e237/debugging-mqtt-1.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 62.65822784810127%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABnklEQVQ4y5WSS27bQBBEeQKJkij+PzPDn4ciaQqUV4K9yym09iInMBwdvuJqmAISJJC9KDSHzX5TNUNHaY1hGDCOI06nEzprkSQJlFJgb55PKMtS3mVZhjRNpf5L7DkcOhwOaNsWTV3DGCPDURSJCI7jGH4QIAgC+L6P/X4vlfI8D7vdTp7Zdwjo+wGlMQjD8AZbr9ei1Wol1XVdEQHsL4AlDWe32y0cbQysteKClikObDabP0QYnXiBh9cfr3j/+Y63X2+4Xq+4XC6Skps5VVVhGEYUeS67LUAC/gbSATcezYj5ccY8zzifz3JMdCmRtTY4Tkc5+MXl/4CsRVHA1CVsZ9F1nawZl3fAeacolNjVWt8FUvyuqmo5pjzPb7fLZ4IdNsdhlBf3IlOMxmPq+/6WinM3IBcL6B6QVSsloKZpBLzM0bkAl5u9C/yE8gKaphWHj9Mka7rkBpz7MnDzGdlohYe6gW1bUcrIUYT2u0A63Lku5rrGk7V4nibRy3TEVJboswz6u5G3vJQwhI5jGCpJUKUpVBSh8H2EHz/2b7yxW2xM49E6AAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;enabling debug logging for mqtt&quot;
+        title=&quot;enabling debug logging for mqtt&quot;
+        src=&quot;/static/cbe0410e4869f1e4c6e99309f0770fad/f058b/debugging-mqtt-1.png&quot;
+        srcset=&quot;/static/cbe0410e4869f1e4c6e99309f0770fad/c26ae/debugging-mqtt-1.png 158w,
+/static/cbe0410e4869f1e4c6e99309f0770fad/6bdcf/debugging-mqtt-1.png 315w,
+/static/cbe0410e4869f1e4c6e99309f0770fad/f058b/debugging-mqtt-1.png 630w,
+/static/cbe0410e4869f1e4c6e99309f0770fad/2e237/debugging-mqtt-1.png 790w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;and looked at the &lt;em&gt;system&lt;/em&gt; logs.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;💡 Tip: this is NOT the activity logbook, but the logs under Settings &gt; System &gt; Logs&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;I could then see what the error was:&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Logger: homeassistant.components.mqtt.entity
+Source: components/mqtt/entity.py:155
+integration: MQTT (documentation, issues)
+First occurred: 02:11:02 (19 occurrences)
+Last logged: 10:38:09
+
+    Error &apos;extra keys not allowed @ data[&apos;device&apos;][&apos;support_url&apos;]&apos; when processing MQTT discovery message topic: &apos;homeassistant/sensor/water_meter_wifi_bssid/config&apos;, message: &apos;{&apos;unique_id&apos;: &apos;water_meter_wifi_bssid&apos;, &apos;object_id&apos;: &apos;water_meter_wifi_bssid&apos;, &apos;icon&apos;: &apos;mdi:access-point-network&apos;, &apos;qos&apos;: &apos;0&apos;, &apos;state_topic&apos;: &apos;everblu/cyble/bssid&apos;, &apos;force_update&apos;: &apos;true&apos;, &apos;entity_category&apos;: &apos;diagnostic&apos;, &apos;device&apos;: {&apos;identifiers&apos;: [&apos;14071984&apos;], &apos;model&apos;: &apos;Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32&apos;, &apos;manufacturer&apos;: &apos;Psykokwak [Forked by Genestealer]&apos;, &apos;support_url&apos;: &apos;https://github.com/genestealer/everblu-meters-esp8266-improved&apos;, &apos;suggested_area&apos;: &apos;Home&apos;, &apos;name&apos;: &apos;Water Meter&apos;}, &apos;name&apos;: &apos;WiFi BSSID&apos;}&apos;
+    Error &apos;expected SensorDeviceClass or one of &apos;date&apos;, &apos;enum&apos;, &apos;timestamp&apos;, &apos;apparent_power&apos;, &apos;aqi&apos;, &apos;area&apos;, &apos;atmospheric_pressure&apos;, &apos;battery&apos;, &apos;blood_glucose_concentration&apos;, &apos;carbon_monoxide&apos;, &apos;carbon_dioxide&apos;, &apos;conductivity&apos;, &apos;current&apos;, &apos;data_rate&apos;, &apos;data_size&apos;, &apos;distance&apos;, &apos;duration&apos;, &apos;energy&apos;, &apos;energy_distance&apos;, &apos;energy_storage&apos;, &apos;frequency&apos;, &apos;gas&apos;, &apos;humidity&apos;, &apos;illuminance&apos;, &apos;irradiance&apos;, &apos;moisture&apos;, &apos;monetary&apos;, &apos;nitrogen_dioxide&apos;, &apos;nitrogen_monoxide&apos;, &apos;nitrous_oxide&apos;, &apos;ozone&apos;, &apos;ph&apos;, &apos;pm1&apos;, &apos;pm10&apos;, &apos;pm25&apos;, &apos;power_factor&apos;, &apos;power&apos;, &apos;precipitation&apos;, &apos;precipitation_intensity&apos;, &apos;pressure&apos;, &apos;reactive_power&apos;, &apos;signal_strength&apos;, &apos;sound_pressure&apos;, &apos;speed&apos;, &apos;sulphur_dioxide&apos;, &apos;temperature&apos;, &apos;volatile_organic_compounds&apos;, &apos;volatile_organic_compounds_parts&apos;, &apos;voltage&apos;, &apos;volume&apos;, &apos;volume_storage&apos;, &apos;volume_flow_rate&apos;, &apos;water&apos;, &apos;weight&apos;, &apos;wind_direction&apos;, &apos;wind_speed&apos; for dictionary value @ data[&apos;device_class&apos;]&apos; when processing MQTT discovery message topic: &apos;homeassistant/sensor/water_meter_wifi_status/config&apos;, message: &apos;{&apos;unique_id&apos;: &apos;water_meter_wifi_status&apos;, &apos;object_id&apos;: &apos;water_meter_wifi_status&apos;, &apos;device_class&apos;: &apos;connectivity&apos;, &apos;qos&apos;: &apos;0&apos;, &apos;state_topic&apos;: &apos;everblu/cyble/status&apos;, &apos;force_update&apos;: &apos;true&apos;, &apos;entity_category&apos;: &apos;diagnostic&apos;, &apos;device&apos;: {&apos;identifiers&apos;: [&apos;14071984&apos;], &apos;model&apos;: &apos;Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32&apos;, &apos;manufacturer&apos;: &apos;Psykokwak [Forked by Genestealer]&apos;, &apos;support_url&apos;: &apos;https://github.com/genestealer/everblu-meters-esp8266-improved&apos;, &apos;suggested_area&apos;: &apos;Home&apos;, &apos;name&apos;: &apos;Water Meter&apos;}, &apos;name&apos;: &apos;WiFi Status&apos;}&apos;
+    Error &apos;extra keys not allowed @ data[&apos;device&apos;][&apos;support_url&apos;]&apos; when processing MQTT discovery message topic: &apos;homeassistant/sensor/water_meter_uptime/config&apos;, message: &apos;{&apos;unique_id&apos;: &apos;water_meter_uptime&apos;, &apos;object_id&apos;: &apos;water_meter_uptime&apos;, &apos;device_class&apos;: &apos;timestamp&apos;, &apos;qos&apos;: &apos;0&apos;, &apos;state_topic&apos;: &apos;everblu/cyble/uptime&apos;, &apos;force_update&apos;: &apos;true&apos;, &apos;entity_category&apos;: &apos;diagnostic&apos;, &apos;device&apos;: {&apos;identifiers&apos;: [&apos;14071984&apos;], &apos;model&apos;: &apos;Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32&apos;, &apos;manufacturer&apos;: &apos;Psykokwak [Forked by Genestealer]&apos;, &apos;support_url&apos;: &apos;https://github.com/genestealer/everblu-meters-esp8266-improved&apos;, &apos;suggested_area&apos;: &apos;Home&apos;, &apos;name&apos;: &apos;Water Meter&apos;}, &apos;name&apos;: &apos;Device Uptime&apos;}&apos;
+    Error &apos;extra keys not allowed @ data[&apos;device&apos;][&apos;support_url&apos;]&apos; when processing MQTT discovery message topic: &apos;homeassistant/sensor/water_meter_wifi_signal_percentage/config&apos;, message: &apos;{&apos;unique_id&apos;: &apos;water_meter_wifi_signal_percentage&apos;, &apos;object_id&apos;: &apos;water_meter_wifi_signal_percentage&apos;, &apos;device_class&apos;: &apos;signal_strength&apos;, &apos;icon&apos;: &apos;mdi:wifi&apos;, &apos;unit_of_measurement&apos;: &apos;%&apos;, &apos;qos&apos;: &apos;0&apos;, &apos;state_topic&apos;: &apos;everblu/cyble/wifi_signal_percentage&apos;, &apos;force_update&apos;: &apos;true&apos;, &apos;entity_category&apos;: &apos;diagnostic&apos;, &apos;device&apos;: {&apos;identifiers&apos;: [&apos;14071984&apos;], &apos;model&apos;: &apos;Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32&apos;, &apos;manufacturer&apos;: &apos;Psykokwak [Forked by Genestealer]&apos;, &apos;support_url&apos;: &apos;https://github.com/genestealer/everblu-meters-esp8266-improved&apos;, &apos;suggested_area&apos;: &apos;Home&apos;, &apos;name&apos;: &apos;Water Meter&apos;}, &apos;name&apos;: &apos;WiFi Signal&apos;}&apos;
+    Error &apos;extra keys not allowed @ data[&apos;device&apos;][&apos;support_url&apos;]&apos; when processing MQTT discovery message topic: &apos;homeassistant/sensor/water_meter_value/config&apos;, message: &apos;{&apos;unique_id&apos;: &apos;water_meter_value&apos;, &apos;object_id&apos;: &apos;water_meter_value&apos;, &apos;icon&apos;: &apos;mdi:water&apos;, &apos;unit_of_measurement&apos;: &apos;L&apos;, &apos;device_class&apos;: &apos;water&apos;, &apos;state_class&apos;: &apos;total_increasing&apos;, &apos;qos&apos;: 0, &apos;state_topic&apos;: &apos;everblu/cyble/liters&apos;, &apos;force_update&apos;: True, &apos;device&apos;: {&apos;identifiers&apos;: [&apos;14071984&apos;], &apos;model&apos;: &apos;Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32&apos;, &apos;manufacturer&apos;: &apos;Psykokwak [Forked by Genestealer]&apos;, &apos;support_url&apos;: &apos;https://github.com/genestealer/everblu-meters-esp8266-improved&apos;, &apos;suggested_area&apos;: &apos;Home&apos;, &apos;name&apos;: &apos;Water Meter&apos;}, &apos;name&apos;: &apos;Reading (Total)&apos;}&apos;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;As you can see there are some errors regarding the &lt;code class=&quot;language-text&quot;&gt;support_url&lt;/code&gt; field. Removing this invalid field in the schema (and some other minor tweaks) in the PR resolved the issue and the device became available in HA! 🎉&lt;/p&gt;
+&lt;h1&gt;Result, and what next?&lt;/h1&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/7f84278fd76bf7800a8cd1012ee359c0/5b4a1/water-meter-ha.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 103.16455696202532%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAVCAYAAABG1c6oAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAC3UlEQVQ4y51UWXLqMBDkBIEEvEiy5E3ybiAYTKhU7n+sfjVjDAHy9T6mSsuoNdPd0uJ4PGIYDsjyDFJKREoiiqL/jsV6vcYUH1h7HtaBwLz28fFxi3ve+s/9OWexWq3AsVzi3fOxkgbv7+9TwmbzAkB7FDTf/N7fbHh9MScsl0voKMJ4HDAcBnRdyxQopW5B8+FwwDiOSJIEQghejyIFrRR8338EJA52ux1H0zSw1sI5h6IooLWGkBK5q1BVFa/RPgGrSEOl+Ssg3dZte/Rdj7pu+BAdpoNUnZQKJk5ROIu6rqZL8xzKxFCufgJcLSF9CStyZFn6p4JhGCJMHfysgm9bBCaDCEMookYIeJ53B1wRYKBgkxa2brjFGYjGJo4RBCG0iaGNgVQRU0A8UlAHJNIvwBW8IECQOfgmvyVN3lSIrmMSZBgGxHF8FeTewUPLBEgLpLTRU1UEym0KCT8yEMRhalEUjoUjwQiUuOy6DkEQPNlGaxxPJ4znM87nM4uRJjFSW0D1RxYlzhwK5x4qpIvzPOfLb4Bvb29sgZ+fH3x/f+NEwOOIr68vnndtA6E00rJHVZbsAKYjihiMqnypkG6q65pboWrnMEZDhgGEipAWLaqq5BaNMVxllmUoy/IRkDikBTaqUjyewkcQCvhkESFhMstUlFV1y6VKCfxPDi+XC6s4vxDiq2haJLtxMnaSoS4LbLsW7mp4Mj9V/KDyzOEMSBySMF+XC8bTCbttP73drIC0FaRroJKcLTWL82IbUilmAwc3w3KQdXyPDwRKw1cGvk54THuc85exCdBdLcGHZw6FgpeWfPBzt8VpGHA8fMLZnGmYjf/yORCxZBtqtW1bbLdb9F2Hfv8J93lmUWxZY7/bgX56ulxKwZ+DfP4ciMM0TZnD/X6Pw+Fw45LGXVNzWzq1MGmGxDqYOJmq0wbR8/c1P735kT+E53EQBSovIWyNsOghUzsBqvsH+w+HqTNu+nnx6QAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;A screenshot of the water meter in Home Assistant&quot;
+        title=&quot;A screenshot of the water meter in Home Assistant&quot;
+        src=&quot;/static/7f84278fd76bf7800a8cd1012ee359c0/f058b/water-meter-ha.png&quot;
+        srcset=&quot;/static/7f84278fd76bf7800a8cd1012ee359c0/c26ae/water-meter-ha.png 158w,
+/static/7f84278fd76bf7800a8cd1012ee359c0/6bdcf/water-meter-ha.png 315w,
+/static/7f84278fd76bf7800a8cd1012ee359c0/f058b/water-meter-ha.png 630w,
+/static/7f84278fd76bf7800a8cd1012ee359c0/5b4a1/water-meter-ha.png 831w&quot;
+        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+        decoding=&quot;async&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;Now I just need to tidy up those wires and 3D print a tidy little case to hide it away in the pantry.&lt;/p&gt;
+&lt;p&gt;You can find my &lt;a href=&quot;https://github.com/AdrianLThomas/everblu-meters-esp8266-improved&quot;&gt;fork here&lt;/a&gt; or if you prefer to view the diff see the &lt;a href=&quot;https://github.com/genestealer/everblu-meters-esp8266-improved/pull/3&quot;&gt;PR to the maintainer here&lt;/a&gt;.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Running Postgres 100% in the browser with PGlite and Drizzle]]></title><description><![CDATA[tl;dr I’ve been playing around with PGlite (Postgres WASM), and it’s pretty cool. There are some gotchas, so I’ll run through how I got…]]></description><link>https://www.adrian-thomas.com/blog/2025-03-11/running-postgres-in-the-browser/</link><guid isPermaLink="false">https://www.adrian-thomas.com/blog/2025-03-11/running-postgres-in-the-browser/</guid><pubDate>Tue, 11 Mar 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;tl;dr&lt;/h1&gt;
 &lt;p&gt;I’ve been playing around with &lt;a href=&quot;https://pglite.dev/&quot;&gt;PGlite&lt;/a&gt; (&lt;a href=&quot;https://www.postgresql.org/&quot;&gt;Postgres&lt;/a&gt; &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/WebAssembly&quot;&gt;WASM&lt;/a&gt;), and it’s pretty cool. There are some gotchas, so I’ll run through how I got PGlite running with &lt;a href=&quot;https://vite.dev/&quot;&gt;Vite&lt;/a&gt; (React) and &lt;a href=&quot;https://orm.drizzle.team/&quot;&gt;Drizzle&lt;/a&gt; (ORM). There’s a working &lt;a href=&quot;http://www.adrian-thomas.com/pglite-spa&quot;&gt;demo&lt;/a&gt; and &lt;a href=&quot;https://github.com/AdrianLThomas/pglite-spa&quot;&gt;GitHub repo&lt;/a&gt; at the end too.&lt;/p&gt;
 &lt;h1&gt;Getting setup&lt;/h1&gt;
 &lt;p&gt;Run the Vite scaffolder with your favourite package manager (I’ll continue to use Bun, but feel free to use npm/yarn/pnpm etc)&lt;/p&gt;

@@ -1,0 +1,369 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><meta data-react-helmet="true" name="twitter:description" content="Water bills in the UK are going up, again, and I thought it would be nice to keep a closer eye on the household usage by integrating the water meter in to Home Assistant. Learn how I used an ESP8266 and CC1101 to read from an Irton EverBlu Cyble water meter, and some of the problems I hit along the way."/><meta data-react-helmet="true" name="twitter:title" content="Reading my water meter in Home Assistant"/><meta data-react-helmet="true" name="twitter:creator" content="AdrianLThomas"/><meta data-react-helmet="true" name="twitter:card" content="summary"/><meta data-react-helmet="true" property="og:type" content="website"/><meta data-react-helmet="true" property="og:description" content="Water bills in the UK are going up, again, and I thought it would be nice to keep a closer eye on the household usage by integrating the water meter in to Home Assistant. Learn how I used an ESP8266 and CC1101 to read from an Irton EverBlu Cyble water meter, and some of the problems I hit along the way."/><meta data-react-helmet="true" property="og:title" content="Reading my water meter in Home Assistant"/><meta data-react-helmet="true" name="description" content="Water bills in the UK are going up, again, and I thought it would be nice to keep a closer eye on the household usage by integrating the water meter in to Home Assistant. Learn how I used an ESP8266 and CC1101 to read from an Irton EverBlu Cyble water meter, and some of the problems I hit along the way."/><meta name="theme-color" content="#1e90ff"/><meta name="generator" content="Gatsby 4.11.1"/><style data-href="/styles.c442fa217b1b07d5ca56.css" data-identity="gatsby-global-css">@font-face{font-display:swap;font-family:Montserrat;font-style:normal;font-weight:100;src:local("Montserrat Thin "),local("Montserrat-Thin"),url(/static/montserrat-latin-100-8d7d79679b70dbe27172b6460e7a7910.woff2) format("woff2"),url(/static/montserrat-latin-100-ec38980a9e0119a379e2a9b3dbb1901a.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:italic;font-weight:100;src:local("Montserrat Thin italic"),local("Montserrat-Thinitalic"),url(/static/montserrat-latin-100italic-e279051046ba1286706adc886cf1c96b.woff2) format("woff2"),url(/static/montserrat-latin-100italic-3b325a3173c8207435cd1b76e19bf501.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:normal;font-weight:200;src:local("Montserrat Extra Light "),local("Montserrat-Extra Light"),url(/static/montserrat-latin-200-9d266fbbfa6cab7009bd56003b1eeb67.woff2) format("woff2"),url(/static/montserrat-latin-200-2d8ba08717110d27122e54c34b8a5798.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:italic;font-weight:200;src:local("Montserrat Extra Light italic"),local("Montserrat-Extra Lightitalic"),url(/static/montserrat-latin-200italic-6e5b3756583bb2263eb062eae992735e.woff2) format("woff2"),url(/static/montserrat-latin-200italic-a0d6f343e4b536c582926255367a57da.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:normal;font-weight:300;src:local("Montserrat Light "),local("Montserrat-Light"),url(/static/montserrat-latin-300-00b3e893aab5a8fd632d6342eb72551a.woff2) format("woff2"),url(/static/montserrat-latin-300-ea303695ceab35f17e7d062f30e0173b.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:italic;font-weight:300;src:local("Montserrat Light italic"),local("Montserrat-Lightitalic"),url(/static/montserrat-latin-300italic-56f34ea368f6aedf89583d444bbcb227.woff2) format("woff2"),url(/static/montserrat-latin-300italic-54b0bf2c8c4c12ffafd803be2466a790.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:normal;font-weight:400;src:local("Montserrat Regular "),local("Montserrat-Regular"),url(/static/montserrat-latin-400-b71748ae4f80ec8c014def4c5fa8688b.woff2) format("woff2"),url(/static/montserrat-latin-400-0659a9f4e90db5cf51b50d005bff1e41.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:italic;font-weight:400;src:local("Montserrat Regular italic"),local("Montserrat-Regularitalic"),url(/static/montserrat-latin-400italic-6eed6b4cbb809c6efc7aa7ddad6dbe3e.woff2) format("woff2"),url(/static/montserrat-latin-400italic-7583622cfde30ae49086d18447ab28e7.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:normal;font-weight:500;src:local("Montserrat Medium "),local("Montserrat-Medium"),url(/static/montserrat-latin-500-091b209546e16313fd4f4fc36090c757.woff2) format("woff2"),url(/static/montserrat-latin-500-edd311588712a96bbf435fad264fff62.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:italic;font-weight:500;src:local("Montserrat Medium italic"),local("Montserrat-Mediumitalic"),url(/static/montserrat-latin-500italic-c90ced68b46050061d1a41842d6dfb43.woff2) format("woff2"),url(/static/montserrat-latin-500italic-5146cbfe02b1deea5dffea27a5f2f998.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:normal;font-weight:600;src:local("Montserrat SemiBold "),local("Montserrat-SemiBold"),url(/static/montserrat-latin-600-0480d2f8a71f38db8633b84d8722e0c2.woff2) format("woff2"),url(/static/montserrat-latin-600-b77863a375260a05dd13f86a1cee598f.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:italic;font-weight:600;src:local("Montserrat SemiBold italic"),local("Montserrat-SemiBolditalic"),url(/static/montserrat-latin-600italic-cf46ffb11f3a60d7df0567f8851a1d00.woff2) format("woff2"),url(/static/montserrat-latin-600italic-c4fcfeeb057724724097167e57bd7801.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:normal;font-weight:700;src:local("Montserrat Bold "),local("Montserrat-Bold"),url(/static/montserrat-latin-700-7dbcc8a5ea2289d83f657c25b4be6193.woff2) format("woff2"),url(/static/montserrat-latin-700-99271a835e1cae8c76ef8bba99a8cc4e.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:italic;font-weight:700;src:local("Montserrat Bold italic"),local("Montserrat-Bolditalic"),url(/static/montserrat-latin-700italic-c41ad6bdb4bd504a843d546d0a47958d.woff2) format("woff2"),url(/static/montserrat-latin-700italic-6779372f04095051c62ed36bc1dcc142.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:normal;font-weight:800;src:local("Montserrat ExtraBold "),local("Montserrat-ExtraBold"),url(/static/montserrat-latin-800-db9a3e0ba7eaea32e5f55328ace6cf23.woff2) format("woff2"),url(/static/montserrat-latin-800-4e3c615967a2360f5db87d2f0fd2456f.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:italic;font-weight:800;src:local("Montserrat ExtraBold italic"),local("Montserrat-ExtraBolditalic"),url(/static/montserrat-latin-800italic-bf45bfa14805969eda318973947bc42b.woff2) format("woff2"),url(/static/montserrat-latin-800italic-fe82abb0bcede51bf724254878e0c374.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:normal;font-weight:900;src:local("Montserrat Black "),local("Montserrat-Black"),url(/static/montserrat-latin-900-e66c7edc609e24bacbb705175669d814.woff2) format("woff2"),url(/static/montserrat-latin-900-8211f418baeb8ec880b80ba3c682f957.woff) format("woff")}@font-face{font-display:swap;font-family:Montserrat;font-style:italic;font-weight:900;src:local("Montserrat Black italic"),local("Montserrat-Blackitalic"),url(/static/montserrat-latin-900italic-4454c775e48152c1a72510ceed3603e2.woff2) format("woff2"),url(/static/montserrat-latin-900italic-efcaa0f6a82ee0640b83a0916e6e8d68.woff) format("woff")}@font-face{font-display:swap;font-family:Merriweather;font-style:normal;font-weight:300;src:local("Merriweather Light "),local("Merriweather-Light"),url(/static/merriweather-latin-300-fc117160c69a8ea0851b26dd14748ee4.woff2) format("woff2"),url(/static/merriweather-latin-300-58b18067ebbd21fda77b67e73c241d3b.woff) format("woff")}@font-face{font-display:swap;font-family:Merriweather;font-style:italic;font-weight:300;src:local("Merriweather Light italic"),local("Merriweather-Lightitalic"),url(/static/merriweather-latin-300italic-fe29961474f8dbf77c0aa7b9a629e4bc.woff2) format("woff2"),url(/static/merriweather-latin-300italic-23c3f1f88683618a4fb8d265d33d383a.woff) format("woff")}@font-face{font-display:swap;font-family:Merriweather;font-style:normal;font-weight:400;src:local("Merriweather Regular "),local("Merriweather-Regular"),url(/static/merriweather-latin-400-d9479e8023bef9cbd9bf8d6eabd6bf36.woff2) format("woff2"),url(/static/merriweather-latin-400-040426f99ff6e00b86506452e0d1f10b.woff) format("woff")}@font-face{font-display:swap;font-family:Merriweather;font-style:italic;font-weight:400;src:local("Merriweather Regular italic"),local("Merriweather-Regularitalic"),url(/static/merriweather-latin-400italic-2de7bfeaf08fb03d4315d49947f062f7.woff2) format("woff2"),url(/static/merriweather-latin-400italic-79db67aca65f5285964ab332bd65f451.woff) format("woff")}@font-face{font-display:swap;font-family:Merriweather;font-style:normal;font-weight:700;src:local("Merriweather Bold "),local("Merriweather-Bold"),url(/static/merriweather-latin-700-4b08e01d805fa35d7bf777f1b24314ae.woff2) format("woff2"),url(/static/merriweather-latin-700-22fb8afba4ab1f093b6ef9e28a9b6e92.woff) format("woff")}@font-face{font-display:swap;font-family:Merriweather;font-style:italic;font-weight:700;src:local("Merriweather Bold italic"),local("Merriweather-Bolditalic"),url(/static/merriweather-latin-700italic-cd92541b177652fffb6e3b952f1c33f1.woff2) format("woff2"),url(/static/merriweather-latin-700italic-f87f3d87cea0dd0979bfc8ac9ea90243.woff) format("woff")}@font-face{font-display:swap;font-family:Merriweather;font-style:normal;font-weight:900;src:local("Merriweather Black "),local("Merriweather-Black"),url(/static/merriweather-latin-900-f813fc6a4bee46eda5224ac7ebf1b7be.woff2) format("woff2"),url(/static/merriweather-latin-900-5d4e42cb44410674acd99153d57df032.woff) format("woff")}@font-face{font-display:swap;font-family:Merriweather;font-style:italic;font-weight:900;src:local("Merriweather Black italic"),local("Merriweather-Blackitalic"),url(/static/merriweather-latin-900italic-b7901d85486871c1779c0e93ddd85656.woff2) format("woff2"),url(/static/merriweather-latin-900italic-9647f9fdab98756989a8a5550eb205c3.woff) format("woff")}
+
+
+/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */html{-webkit-text-size-adjust:100%;line-height:1.15}body{margin:0}main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details{display:block}summary{display:list-item}[hidden]{display:none}:root{--maxWidth-none:"none";--maxWidth-xs:20rem;--maxWidth-sm:24rem;--maxWidth-md:28rem;--maxWidth-lg:32rem;--maxWidth-xl:36rem;--maxWidth-2xl:42rem;--maxWidth-3xl:48rem;--maxWidth-4xl:56rem;--maxWidth-full:"100%";--maxWidth-wrapper:var(--maxWidth-4xl);--spacing-px:"1px";--spacing-0:0;--spacing-1:0.25rem;--spacing-2:0.5rem;--spacing-3:0.75rem;--spacing-4:1rem;--spacing-5:1.25rem;--spacing-6:1.5rem;--spacing-8:2rem;--spacing-10:2.5rem;--spacing-12:3rem;--spacing-16:4rem;--spacing-20:5rem;--spacing-24:6rem;--spacing-32:8rem;--fontFamily-sans:"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";--fontFamily-serif:"Merriweather","Georgia",Cambria,"Times New Roman",Times,serif;--font-body:var(--fontFamily-serif);--font-heading:var(--fontFamily-sans);--fontWeight-normal:400;--fontWeight-medium:500;--fontWeight-semibold:600;--fontWeight-bold:700;--fontWeight-extrabold:800;--fontWeight-black:900;--fontSize-root:16px;--lineHeight-none:1;--lineHeight-tight:1.1;--lineHeight-normal:1.5;--lineHeight-relaxed:1.625;--fontSize-0:0.833rem;--fontSize-1:1rem;--fontSize-2:1.2rem;--fontSize-3:1.44rem;--fontSize-4:1.728rem;--fontSize-5:2.074rem;--fontSize-6:2.488rem;--fontSize-7:2.986rem;--color-primary:#005b99;--color-text:#2e353f;--color-text-light:#4f5969;--color-heading:#1a202c;--color-heading-black:#000;--color-accent:#d1dce5}*,:after,:before{box-sizing:border-box}html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-size:var(--fontSize-root);line-height:var(--lineHeight-normal)}body{color:var(--color-text);font-family:var(--font-body);font-size:var(--fontSize-1)}footer{padding:var(--spacing-6) var(--spacing-0)}hr{background:var(--color-accent);border:0;height:1px}h1,h2,h3,h4,h5,h6{font-family:var(--font-heading);letter-spacing:-.025em;line-height:var(--lineHeight-tight);margin-bottom:var(--spacing-6);margin-top:0}h2,h3,h4,h5,h6{color:var(--color-heading);font-weight:var(--fontWeight-bold)}h1{color:var(--color-heading-black);font-size:var(--fontSize-6)}h2{font-size:var(--fontSize-5)}h3{font-size:var(--fontSize-4)}h4{font-size:var(--fontSize-3)}h5{font-size:var(--fontSize-2)}h6{font-size:var(--fontSize-1)}h1>a,h2>a,h3>a,h4>a,h5>a,h6>a{color:inherit;text-decoration:none}p{--baseline-multiplier:0.179;--x-height-multiplier:0.35;line-height:var(--lineHeight-relaxed);margin:var(--spacing-0) var(--spacing-0) var(--spacing-8) var(--spacing-0)}ol,p,ul{padding:var(--spacing-0)}ol,ul{list-style-image:none;list-style-position:outside;margin-bottom:var(--spacing-8);margin-left:var(--spacing-0);margin-right:var(--spacing-0)}ol li,ul li{padding-left:var(--spacing-0)}li>p,ol li,ul li{margin-bottom:calc(var(--spacing-8)/2)}li :last-child{margin-bottom:var(--spacing-0)}li>ul{margin-left:var(--spacing-8);margin-top:calc(var(--spacing-8)/2)}blockquote{border-left:var(--spacing-1) solid var(--color-primary);color:var(--color-text-light);font-size:var(--fontSize-2);font-style:italic;margin-bottom:var(--spacing-8);margin-left:calc(var(--spacing-6)*-1);margin-right:var(--spacing-8);padding:var(--spacing-0) var(--spacing-0) var(--spacing-0) var(--spacing-6)}blockquote>:last-child{margin-bottom:var(--spacing-0)}blockquote>ol,blockquote>ul{list-style-position:inside}table{border-collapse:collapse;border-spacing:.25rem;margin-bottom:var(--spacing-8);width:100%}table thead tr th{border-bottom:1px solid var(--color-accent)}a{color:var(--color-primary)}a:focus,a:hover{text-decoration:none}.global-wrapper{margin:var(--spacing-0) auto;max-width:var(--maxWidth-wrapper);padding:0 var(--spacing-5) var(--spacing-10)}.global-wrapper[data-is-root-path=true] .bio{margin-bottom:var(--spacing-20)}.global-header{margin-bottom:var(--spacing-12)}.post-list-item{margin-bottom:var(--spacing-8);margin-top:var(--spacing-8)}.post-list-item p{margin-bottom:var(--spacing-0)}.post-list-item h2{color:var(--color-primary);font-size:var(--fontSize-4);margin-bottom:var(--spacing-2);margin-top:var(--spacing-0)}.post-list-item header{margin-bottom:var(--spacing-4)}.header-link-home{font-family:var(--font-heading);font-size:var(--fontSize-2);font-weight:var(--fontWeight-bold);text-decoration:none}.blog-post header h1{margin:var(--spacing-0) var(--spacing-0) var(--spacing-4) var(--spacing-0)}.blog-post header p{font-family:var(--font-heading);font-size:var(--fontSize-2)}.blog-post-nav ul{margin:var(--spacing-0)}.gatsby-highlight{margin-bottom:var(--spacing-8)}@media (max-width:42rem){blockquote{margin-left:var(--spacing-0);padding:var(--spacing-0) var(--spacing-0) var(--spacing-0) var(--spacing-4)}ol,ul{list-style-position:inside}}#___gatsby,#gatsby-focus-wrapper,body,html{height:100%}.global-wrapper{width:100%}code[class*=language-],pre[class*=language-]{word-wrap:normal;background:none;color:#000;font-family:Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;font-size:1em;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none;line-height:1.5;-o-tab-size:4;tab-size:4;text-align:left;text-shadow:0 1px #fff;white-space:pre;word-break:normal;word-spacing:normal}code[class*=language-]::selection,code[class*=language-] ::selection,pre[class*=language-]::selection,pre[class*=language-] ::selection{background:#b3d4fc;text-shadow:none}@media print{code[class*=language-],pre[class*=language-]{text-shadow:none}}pre[class*=language-]{margin:.5em 0;overflow:auto;padding:1em}:not(pre)>code[class*=language-],pre[class*=language-]{background:#f5f2f0}:not(pre)>code[class*=language-]{border-radius:.3em;padding:.1em;white-space:normal}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#708090}.token.punctuation{color:#999}.token.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#905}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string{color:#690}.language-css .token.string,.style .token.string,.token.entity,.token.operator,.token.url{background:hsla(0,0%,100%,.5);color:#9a6e3a}.token.atrule,.token.attr-value,.token.keyword{color:#07a}.token.class-name,.token.function{color:#dd4a68}.token.important,.token.regex,.token.variable{color:#e90}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}</style><style>.gatsby-image-wrapper{position:relative;overflow:hidden}.gatsby-image-wrapper picture.object-fit-polyfill{position:static!important}.gatsby-image-wrapper img{bottom:0;height:100%;left:0;margin:0;max-width:none;padding:0;position:absolute;right:0;top:0;width:100%;object-fit:cover}.gatsby-image-wrapper [data-main-image]{opacity:0;transform:translateZ(0);transition:opacity .25s linear;will-change:opacity}.gatsby-image-wrapper-constrained{display:inline-block;vertical-align:top}</style><noscript><style>.gatsby-image-wrapper noscript [data-main-image]{opacity:1!important}.gatsby-image-wrapper [data-placeholder-image]{opacity:0!important}</style></noscript><script type="module">const e="undefined"!=typeof HTMLImageElement&&"loading"in HTMLImageElement.prototype;e&&document.body.addEventListener("load",(function(e){if(void 0===e.target.dataset.mainImage)return;if(void 0===e.target.dataset.gatsbyImageSsr)return;const t=e.target;let a=null,n=t;for(;null===a&&n;)void 0!==n.parentNode.dataset.gatsbyImageWrapper&&(a=n.parentNode),n=n.parentNode;const o=a.querySelector("[data-placeholder-image]"),r=new Image;r.src=t.currentSrc,r.decode().catch((()=>{})).then((()=>{t.style.opacity=1,o&&(o.style.opacity=0,o.style.transition="opacity 500ms linear")}))}),!0);</script><link rel="preconnect" href="https://www.googletagmanager.com"/><link rel="dns-prefetch" href="https://www.googletagmanager.com"/><link rel="alternate" type="application/rss+xml" title="Adrian L Thomas" href="/rss.xml"/><link rel="icon" href="/favicon-32x32.png?v=cc1665620e0dfea62da155c249953bf0" type="image/png"/><link rel="manifest" href="/manifest.webmanifest" crossorigin="anonymous"/><link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png?v=cc1665620e0dfea62da155c249953bf0"/><link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png?v=cc1665620e0dfea62da155c249953bf0"/><link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png?v=cc1665620e0dfea62da155c249953bf0"/><link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png?v=cc1665620e0dfea62da155c249953bf0"/><link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png?v=cc1665620e0dfea62da155c249953bf0"/><link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png?v=cc1665620e0dfea62da155c249953bf0"/><link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png?v=cc1665620e0dfea62da155c249953bf0"/><link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png?v=cc1665620e0dfea62da155c249953bf0"/><title data-react-helmet="true">Reading my water meter in Home Assistant | Adrian L Thomas</title><style data-styled="" data-styled-version="5.3.5">.iUnJFe{background-color:#1a202c;opacity:1;background-image:linear-gradient(30deg,#1d2e51 12%,transparent 12.5%,transparent 87%,#1d2e51 87.5%,#1d2e51),linear-gradient(150deg,#1d2e51 12%,transparent 12.5%,transparent 87%,#1d2e51 87.5%,#1d2e51),linear-gradient(30deg,#1d2e51 12%,transparent 12.5%,transparent 87%,#1d2e51 87.5%,#1d2e51),linear-gradient(150deg,#1d2e51 12%,transparent 12.5%,transparent 87%,#1d2e51 87.5%,#1d2e51),linear-gradient(60deg,#1d2e5177 25%,transparent 25.5%,transparent 75%,#1d2e5177 75%,#1d2e5177),linear-gradient(60deg,#1d2e5177 25%,transparent 25.5%,transparent 75%,#1d2e5177 75%,#1d2e5177);background-size:24px 42px;background-position:0 0,0 0,12px 21px,12px 21px,0 0,12px 21px;width:100%;min-height:150px;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-align-items:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;border-bottom:0.5rem solid dodgerblue;padding:15px;}/*!sc*/
+.iUnJFe h1,.iUnJFe p{color:white;}/*!sc*/
+.iUnJFe h1{font-weight:bold;}/*!sc*/
+.iUnJFe p{font-weight:lighter;margin:0;}/*!sc*/
+.iUnJFe a{-webkit-text-decoration:none;text-decoration:none;}/*!sc*/
+data-styled.g1[id="hero__Container-sc-1ng29j0-0"]{content:"iUnJFe,"}/*!sc*/
+.fVXSPP{background-color:#1a202c;opacity:1;background-image:linear-gradient(30deg,#1d2e51 12%,transparent 12.5%,transparent 87%,#1d2e51 87.5%,#1d2e51),linear-gradient(150deg,#1d2e51 12%,transparent 12.5%,transparent 87%,#1d2e51 87.5%,#1d2e51),linear-gradient(30deg,#1d2e51 12%,transparent 12.5%,transparent 87%,#1d2e51 87.5%,#1d2e51),linear-gradient(150deg,#1d2e51 12%,transparent 12.5%,transparent 87%,#1d2e51 87.5%,#1d2e51),linear-gradient(60deg,#1d2e5177 25%,transparent 25.5%,transparent 75%,#1d2e5177 75%,#1d2e5177),linear-gradient(60deg,#1d2e5177 25%,transparent 25.5%,transparent 75%,#1d2e5177 75%,#1d2e5177);background-size:24px 42px;background-position:0 0,0 0,12px 21px,12px 21px,0 0,12px 21px;width:100%;margin-top:auto;text-align:center;border-top:0.5rem solid dodgerblue;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;-webkit-flex-wrap:wrap;-ms-flex-wrap:wrap;flex-wrap:wrap;}/*!sc*/
+.fVXSPP > *{margin-right:15px;}/*!sc*/
+@media only screen and (max-width:500px){.fVXSPP > span{-webkit-flex-basis:500px;-ms-flex-preferred-size:500px;flex-basis:500px;}}/*!sc*/
+.fVXSPP a,.fVXSPP span{color:white;}/*!sc*/
+data-styled.g2[id="layout__Footer-sc-rvd8xs-0"]{content:"fVXSPP,"}/*!sc*/
+.ehZYJV{height:100%;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;}/*!sc*/
+.ehZYJV .global-wrapper{margin-top:18px;}/*!sc*/
+data-styled.g3[id="layout__Wrapper-sc-rvd8xs-1"]{content:"ehZYJV,"}/*!sc*/
+</style><link rel="sitemap" type="application/xml" href="/sitemap/sitemap-index.xml"/><link as="script" rel="preload" href="/webpack-runtime-83d24ad685577667119e.js"/><link as="script" rel="preload" href="/framework-0613c9735af2d6569ef8.js"/><link as="script" rel="preload" href="/app-dad061e5f536956a6be2.js"/><link as="script" rel="preload" href="/commons-1d6544cb43ed1fc99bce.js"/><link as="script" rel="preload" href="/component---src-templates-blog-post-js-0b182b8b6135f0b205f7.js"/><link as="fetch" rel="preload" href="/page-data/blog/2025-03-17/reading-my-water-meter-in-home-assistant/page-data.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/2188205249.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/223224310.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/sq/d/2441407101.json" crossorigin="anonymous"/><link as="fetch" rel="preload" href="/page-data/app-data.json" crossorigin="anonymous"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" id="gatsby-focus-wrapper"><div class="layout__Wrapper-sc-rvd8xs-1 ehZYJV"><div class="hero__Container-sc-1ng29j0-0 iUnJFe"><a href="/blog"><h1>Adrian L Thomas</h1></a><p>Pizza, programming and cars - sometimes in that order.</p></div><div class="global-wrapper"><main><article class="blog-post" itemscope="" itemType="http://schema.org/Article"><header><h1 itemProp="headline">Reading my water meter in Home Assistant</h1><p>March 17, 2025</p></header><section itemProp="articleBody"><p>Water bills in the UK <a href="https://www.bbc.co.uk/news/articles/c5yd9qzx79go">are going up, again</a>, and I thought it would be nice to keep a closer eye on the household usage by integrating the water meter in to <a href="https://www.home-assistant.io/">Home Assistant</a>.</p>
+<h1>What I wanted to do</h1>
+<p>I wanted the water meter readings in Home Assistant so perhaps I could set up alerts and generally try to reduce how much water was being used (and identify when/where it gets used the most).</p>
+<h2>Setting up HA (Home Assistant)</h2>
+<p>I already had Home Assistant set up, but it’s simple enough to get started if you’re already self hosting things <a href="https://www.home-assistant.io/installation/linux#docker-compose">with Docker</a> (e.g. homelab, raspberry pi or an off the shelf device). There’s quite a <a href="https://www.home-assistant.io/installation/">few options available</a>.</p>
+<h1>The Solution</h1>
+<p>The solution for you could well differ from mine, there’s a ton of <a href="https://www.home-assistant.io/docs/energy/water/">options documented to read your water meter</a>, but in my case I had an Irton EverBlu Cyble water meter, that as far as I know is fairly common in the UK. So the first step would be identify what you have so that you can work out how to read it.</p>
+<p>I came <a href="https://community.home-assistant.io/t/reading-itron-everblu-cyble-rf-enhanced-water-meter-with-esp32-esp8266-and-433mhz-cc1101-home-assistant-mqtt-autodiscovery/833180">across this post on the HA forum</a> describing a solution for reading my meter using a 433MHz transceiver (the same way the water company reads the meter from the van outside your house).</p>
+<p>I already had some spare ESP8266’s around, so just needed a CC1101 transceiver which only cost a few quid off Amazon.</p>
+<h2>ESP.. what?</h2>
+<p>The ESP8266 is a very cheap microcontroller (as in only a few pounds), with built in WiFi.</p>
+<p>They’re not very powerful (80-160MHz), but for most IoT projects they don’t need to be. If you’ve ever used an Arduino or used the SPI pins on a Raspberry Pi, you’ll feel right at home.</p>
+<p><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; "
+    >
+      <a
+    class="gatsby-resp-image-link"
+    href="/static/a092bc88a280b8738e2218978499186f/29114/esp8266.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+    <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 66.45569620253164%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAAsTAAALEwEAmpwYAAADW0lEQVQ4yz2Q209bBRzHz5/gw14EyyCbAV3GaJBqAkMYrFwsaxGMEViwGZBNszkyZdwGzGDHZUCht9PL6WnP6Tmnpz29UDpn9MEXfTM++KBPmphooib+DR/Tmuzh8/r5fn4/oXRapVx5RqF4SuXsOdUvv6FaKeLf3eDe3Ts8Wl+lVK5QrX5FqVR5gWWVyOUL5HIFdCOHppsoqoZQLJ9RLFcolirkrDLhk32+NnwYcR/ffVshdLjJ/NyHmPkCZ9XnWIVSfTxvFcmaecycha6baFoWRdEQCrW14ilWscz6xjrX+rrZ2fiYP377kX//+pm/f/8BUz1h7tYMiqrWpbWymlA3zLo0oxmoqk4qpSLkCmXMXKEu9e3u4nINc8PZxecrC/zz50/8+sv3PFpawD3ah+ddN4FQkNOzZ3WRZpgY2RxqxkBRdWS5JrTK6KZFNl9E0U0Gr1/D6RxkqK+T+ZseerodnDv3ElNT7+HxjDEw2M/e/l797zWRqhmkVZ2krCIlFQTTKqFla2s5pFSGqekZmpubGBoeoqfrCh8Md+KdHsduv4Lb7cI19g5djjdYXVutV9bKaiSTCpKkIGimhaJlSak68WSapeU1HI43sTXZGHEOMDNi5/3xUSYmJ7Hb27n46gVGRod5u7eb5YefoWomcipDPJEiGpMR9KyFkjFIZ/S6NBAMc++TRTo7O2loeJmevgFcbjcTE+N0dLTj9c6QSARxjTpZXVt7cW48niIWSyFkjDzJlEo683+lGJN4enDEnY/ucvlyO83nbfT39+FyuVj69D6+7XW2NpfxeNzsH/gJiwliiTSimCQiSggZzSQpK6hatk5CkgmFRPb2D5ibv01raystLU10Obro6+3m0mut2Gw2eq9eZWVlDf9xqH5qJCIRDMUQkmmdaFxGVgxkRScWlwlHYpwEImx/scP0zCxtbW2cb2rAZmvklcZGLl5o4cbYGJtb2xwcBgiFE3UCgSiCouhIUopMJouqGiSlNIm4TCwqEQxE8G3v4J29xVsOB+2XXsfe0c6w8zqL9xd5un/MyXGEYDCGGJEIBEQEUUwQCIrIaYOknCEciRMMioSCUfxHQXaf7LGxvsXC/G0mJybwznp58OAhjx/7ODwK4T8WOT6JEggleLLr5z9HrZVt5gvYhgAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+  ></span>
+  <img
+        class="gatsby-resp-image-image"
+        alt="a picture of an ESP8266"
+        title="ESP8266"
+        src="/static/a092bc88a280b8738e2218978499186f/f058b/esp8266.png"
+        srcset="/static/a092bc88a280b8738e2218978499186f/c26ae/esp8266.png 158w,
+/static/a092bc88a280b8738e2218978499186f/6bdcf/esp8266.png 315w,
+/static/a092bc88a280b8738e2218978499186f/f058b/esp8266.png 630w,
+/static/a092bc88a280b8738e2218978499186f/40601/esp8266.png 945w,
+/static/a092bc88a280b8738e2218978499186f/78612/esp8266.png 1260w,
+/static/a092bc88a280b8738e2218978499186f/29114/esp8266.png 1920w"
+        sizes="(max-width: 630px) 100vw, 630px"
+        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+        loading="lazy"
+        decoding="async"
+      />
+  </a>
+    </span></p>
+<h2>CC1.. what?</h2>
+<p>I didn’t know much about the CC1101 until recently either. It’s described as a low-cost sub-1 GHz transceiver designed for very low-power wireless applications.</p>
+<p>Basically, you can use it to wirelessly read data from your meter.</p>
+<p><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; "
+    >
+      <a
+    class="gatsby-resp-image-link"
+    href="/static/7fb6c970300cc3c1966716930447de4c/73caa/cc1101.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+    <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 69.62025316455697%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAOCAYAAAAvxDzwAAAACXBIWXMAAAsTAAALEwEAmpwYAAADQElEQVQ4y2WT70+TVxiG+we4Dzg1EraoiWFxmTJISBY+EGEd26omUzM1mcFlZFMww8GCdAWsVAGVKBARtBOwP3Q6ZlwLImDmJiDSlrlhZ0SdKGIpRNE6aIvt+76Xabu3dNmdnJwP55wr93nu51EQkiQhSVJ0Dy1RDC0xdEisZgV4PDVDm/0ehy0Ovqi10nbNGT4TRBFFhPfvI0mGzEmQ4NmMH+cDN90DTnr6rlFrtLK29DSZ+UdR5VbxdVUzT15Mh+8rpBhXMng2EOSv0Sn+Hhnhcr+N5gsWNuua+eZAC0fq9OzU1vOl7ns+KqwnY2sRWV9VYmi/KgNjHUl0226wTd+Pau9P9NiuM+sZ41OdkcTtenT1Z/hwx0HeTl1N2ntprMrWkZ5XzbrcCr6tNuF+8jzy5WAgwEu/F6/Hxd3Bc+yvOcKOksOs1Rg4cNJKltrM+vIzaGuaUVcbUH68gfRMFamf7SGnwsSaghrSik+Re7wdxdOxQabuW3jx0Mo/7gEmhy9iOFZOwXc6ciubUBUbyK82U1hzHmWxkQ3l59i2t4WcfS0k5ul5X9PClkOn0ZraaR/4A8Wjvipu/VpL/4+76TQU0tpQwM+nSjAfLafs0DHWl55gfOwOvXYHb23X80ZOI2vKjFSYO7D0OLg16gIpGIovUsP7vY30ni3E0VbGI+d5ZsYHsF85ySeaBt7deZxMjZnfbHau223UtXbROzTMtM8brbpvehq743f2Vx7EYr2I4qX3OYLPDdJspE0EETHgpe6Sg1LTZVqv3sA58pigIIcnMnz7DmbzD+TnF6BSrWPlyiQWL45nxYp3IqFEMxbFaOuIwlz6k+5xurq62aPVsXHjJlJSUlm6dBkLFiwiLm4+8fEJJCensLtILffhHCikgH8KRBdGQxObNm8lPT2D5csTSUh4k7i418OgJUuWoVRmoVZr6OzsZGJiIlLD2EkRhSBPH/bhGb2A524ju3I+YN5r81m4cFHYRVJSMtnZn9PQ0MjQ0E38fv9/pkqMHT0ZOnHTzC9ni2jSKtHmrSYjM4uSklI6Oi5FXcQqGAwiCEIYFmJEayhPjMf1J/dsJm4PdjDpGsHn+7+LEEQGyEbk/RVlVHdokwvwbAAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+  ></span>
+  <img
+        class="gatsby-resp-image-image"
+        alt="a picture of the CC1101 transceiver that operates at 433MHz"
+        title="CC1101 transceiver - 433MHz"
+        src="/static/7fb6c970300cc3c1966716930447de4c/f058b/cc1101.png"
+        srcset="/static/7fb6c970300cc3c1966716930447de4c/c26ae/cc1101.png 158w,
+/static/7fb6c970300cc3c1966716930447de4c/6bdcf/cc1101.png 315w,
+/static/7fb6c970300cc3c1966716930447de4c/f058b/cc1101.png 630w,
+/static/7fb6c970300cc3c1966716930447de4c/40601/cc1101.png 945w,
+/static/7fb6c970300cc3c1966716930447de4c/73caa/cc1101.png 1110w"
+        sizes="(max-width: 630px) 100vw, 630px"
+        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+        loading="lazy"
+        decoding="async"
+      />
+  </a>
+    </span></p>
+<h2>MQTT</h2>
+<p>We’ll be using <a href="https://mqtt.org/">MQTT</a> for this. It is a lightweight message queue, commonly used for IoT. We can publish the state of the water meter to it, and Home Assistant will subscribe to these updates accordingly.</p>
+<h1>Getting started</h1>
+<p>So if you want to follow along, I’m making the following assumptions:</p>
+<ol>
+<li>You have the same water meter as me</li>
+<li>You have Home Assistant set up and running</li>
+<li>You have an ESP8266</li>
+<li>You have a CC1101</li>
+</ol>
+<h1>Wiring up the CC1101 to the ESP8266</h1>
+<p>When you buy a component like the CC1101 you normally get a pin out diagram, either from the manufacturer or you can find one online, that looks something like this:
+<span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; "
+    >
+      <a
+    class="gatsby-resp-image-link"
+    href="/static/f9ad159960a5ce7135e74808de42eeec/d7542/cc1101-pinout.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+    <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 94.9367088607595%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAYAAACQjC21AAAACXBIWXMAAAsTAAALEwEAmpwYAAADeklEQVQ4y42S229UVRSH5z8x0UexfeBRookomhiBhsIDiZo0Jj7oixHx3fgiGmLBXuiF0kZaK1q1NcSodNoZKYkQIBa0l6mZmTM9cylzbjNz7mc+s850aqFqXMnK3vuc3/r2b+29E91HnuTrry6wdP0HUotzpFJzLCzMMn9thuT8N6QWZ0ktfsfiwrck52dIp2b5JT1HOj0X60W7uDBLOvU9lz/vJ3G8qwNFyfBolCsm5bKJ57fWfgCa7vFfoWkGie6uTjKZ5fiD5zlUq1XKJZWt/MdUlVNUldNoyrtohVPom6epKu+hKW9TUT7DdSPCwMN1HBzbjhkxcGPj3vYeTR48qJLLrlNXX8MtvYxffgb0faB3grUPrE7QH6deehMnalVFUROtWsVzPQE+RSZzj2YTTEPH83x0vYKh9GAXD+MUD1HP7qe0eoA/bj/P73deQl15muXkUTLXh7g6+QGVYg7bdmKnieMC3HZomYaYxHNq6EoPjeJhbPVFln49wvTVV5meOcGPPx9j9e5z3PzyAMtDPUy8/wrF7Cq27baA3V0dOy2HQUAzbOI0DMzCSdziC6ysHWVl7SDJW93cufssxVwHbD1B8c/XqbvSLgR+gK5p+J5P4sSx/eTya60TjJqxwyDwqZUvoFXOoKq9lIofklwe5Pb9d1hZf4tN5Q20rfGHbjgMWgeaOHTwMW7c+ImtrRKqmqdYVCgU8mRzKtl8iY18mSs3C0wnl5hLX+HarRnur/9GLqeyWcjGNepmnlKpQLlUIDEy/BFTk/1MTQ4wPHKW0YvnGB7tZWS0l4tj5xgcOkv/8Kf0DZxhYOgTxsbOMzE+yKVLfYyP9zExfp7JywN8MTUYZ2K3bcuq0Wg41OsN6rUGQRBiGCa+62HoJrpuEvhh/BJ8P8D3Q1zXf6j1RBgGRFGIjE15O4Dj2IRhuLOW//Lga7Ua9bpkHcsysSwL0zTxPI8oimJd4u+iaAfiOE7sTtZBEBCFYQyTYkmr1oKKrtFoxLr4UpvNvUAJEQlIdpa5aNrA2rYr3/dj/e5O/hXoum68FqBkGyhtijPbtuNRUjYU7V7g9m4SUvAoUM7LMIwY3Aa04x8dhruAtV1nJHDRSJu6rqNpWuyq3ZXk/wIKSIAyF424E5ikzNtn1849QBnFlTiRgvaTaM/FnaRhiEu9dduWFV/ebuBfy1Je2bLknisAAAAASUVORK5CYII='); background-size: cover; display: block;"
+  ></span>
+  <img
+        class="gatsby-resp-image-image"
+        alt="a diagram of the CC1101 pinout"
+        title="CC1101 pin out"
+        src="/static/f9ad159960a5ce7135e74808de42eeec/f058b/cc1101-pinout.png"
+        srcset="/static/f9ad159960a5ce7135e74808de42eeec/c26ae/cc1101-pinout.png 158w,
+/static/f9ad159960a5ce7135e74808de42eeec/6bdcf/cc1101-pinout.png 315w,
+/static/f9ad159960a5ce7135e74808de42eeec/f058b/cc1101-pinout.png 630w,
+/static/f9ad159960a5ce7135e74808de42eeec/d7542/cc1101-pinout.png 810w"
+        sizes="(max-width: 630px) 100vw, 630px"
+        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+        loading="lazy"
+        decoding="async"
+      />
+  </a>
+    </span></p>
+<p>The code we’re going to use provided this mapping table; so attach the CC1101 accordingly:</p>
+<table>
+<thead>
+<tr>
+<th><strong>CC1101</strong></th>
+<th><strong>ESP8266</strong></th>
+<th><strong>Notes</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VCC</td>
+<td>3V3</td>
+<td>Connect to the 3.3V power pin.</td>
+</tr>
+<tr>
+<td>GDO0</td>
+<td>D1</td>
+<td>General-purpose digital output.</td>
+</tr>
+<tr>
+<td>CSN</td>
+<td>D8</td>
+<td>SPI chip select; Feather has GPIO15 as CS.</td>
+</tr>
+<tr>
+<td>SCK</td>
+<td>D5</td>
+<td>SPI clock pin; SPI SCK maps to GPIO14.</td>
+</tr>
+<tr>
+<td>MOSI</td>
+<td>D7</td>
+<td>SPI MOSI pin; maps to GPIO13 on the Feather.</td>
+</tr>
+<tr>
+<td>GDO1 (MISO)</td>
+<td>D6</td>
+<td>SPI MISO pin; maps to GPIO12 on the Feather.</td>
+</tr>
+<tr>
+<td>GDO2</td>
+<td>D2</td>
+<td>Another general-purpose digital output.</td>
+</tr>
+<tr>
+<td>GND</td>
+<td>G</td>
+<td>Connect to ground.</td>
+</tr>
+</tbody>
+</table>
+<p><em>The original table can be found in the source repository <code class="language-text">README.md</code></em></p>
+<p>You should then end up with something like this:
+<span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; "
+    >
+      <a
+    class="gatsby-resp-image-link"
+    href="/static/641670381f7044dc246af484b1b3d2e8/2c3a2/esp8266-wired-up.jpg"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+    <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 104.43037974683544%; position: relative; bottom: 0; left: 0; background-image: url('data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAVABQDASIAAhEBAxEB/8QAGQABAAIDAAAAAAAAAAAAAAAAAAEDBAUG/8QAFQEBAQAAAAAAAAAAAAAAAAAAAQL/2gAMAwEAAhADEAAAAcFdA1IJ0FYVrBUf/8QAHhAAAQMEAwAAAAAAAAAAAAAAAQACAwQQERMSIjH/2gAIAQEAAQUCXltEi0uCd1OEYQ41LeEn/8QAFBEBAAAAAAAAAAAAAAAAAAAAIP/aAAgBAwEBPwEf/8QAFBEBAAAAAAAAAAAAAAAAAAAAIP/aAAgBAgEBPwEf/8QAGxAAAgIDAQAAAAAAAAAAAAAAABEBEAIxYZH/2gAIAQEABj8CvRM5L22xcP/EABoQAQADAQEBAAAAAAAAAAAAAAEAETEhQRD/2gAIAQEAAT8huPVO/B7oWZ2Yw9YwPpcKxAl3yARp1k//2gAMAwEAAgADAAAAECjvgv/EABgRAAMBAQAAAAAAAAAAAAAAAAABMRAR/9oACAEDAQE/EHc4h0//xAAXEQADAQAAAAAAAAAAAAAAAAAAARAR/9oACAECAQE/EEZEf//EABsQAQADAAMBAAAAAAAAAAAAAAEAESExQVFh/9oACAEBAAE/EC2GvUb0XE+wWtYK0cQNX9YowRrqXLxFeQbg55DoynDCpSKJsntZ/9k='); background-size: cover; display: block;"
+  ></span>
+  <img
+        class="gatsby-resp-image-image"
+        alt="esp8266 wired up to a cc1101"
+        title="esp8266 wired up to a cc1101"
+        src="/static/641670381f7044dc246af484b1b3d2e8/828fb/esp8266-wired-up.jpg"
+        srcset="/static/641670381f7044dc246af484b1b3d2e8/ff44c/esp8266-wired-up.jpg 158w,
+/static/641670381f7044dc246af484b1b3d2e8/a6688/esp8266-wired-up.jpg 315w,
+/static/641670381f7044dc246af484b1b3d2e8/828fb/esp8266-wired-up.jpg 630w,
+/static/641670381f7044dc246af484b1b3d2e8/0ede0/esp8266-wired-up.jpg 945w,
+/static/641670381f7044dc246af484b1b3d2e8/3ac88/esp8266-wired-up.jpg 1260w,
+/static/641670381f7044dc246af484b1b3d2e8/2c3a2/esp8266-wired-up.jpg 1402w"
+        sizes="(max-width: 630px) 100vw, 630px"
+        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+        loading="lazy"
+        decoding="async"
+      />
+  </a>
+    </span></p>
+<h1>Problem 1: How do we compile this thing?</h1>
+<p>OK so going back to the original forum post, the code takes us to <a href="https://github.com/genestealer/everblu-meters-esp8266-improved">this repository</a> that is a fork of some older code. I had some issues (documentation and code changes), so of course I forked the fork, and you can <a href="https://github.com/AdrianLThomas/everblu-meters-esp8266-improved">find it here</a>. This fork will remain the basis of what I refer to for the rest of the blog post.</p>
+<p><em>I raised a PR for the original maintainer, but at the time of writing it hasn’t yet been merged.</em></p>
+<p>Previously when tinkering with the ESP8266 I just used the Arduino IDE - it’s fairly straightforward to get up and running. You write some C, compile, upload, and away you go. I’d also used <a href="https://esphome.io/">ESPHome</a> which is a really nice declarative way to wire up components just using YAML.</p>
+<p>However this project wasn’t using either, but I did spot there was a <code class="language-text">platformio.ini</code> file. That means this repo is a <a href="https://platformio.org/">PlatformIO</a> project: effectively a VS Code extension to compile, debug, test and upload code to various IoT devices. It’s new to me but looks pretty nice, and I look forward to trying it out more in the future.</p>
+<p><em>Setting up VSCode and PlatformIO are straightforward so I’ll leave Google to handle that for you.</em></p>
+<p>Finally, you need to configure some private variables as part of the build:</p>
+<div class="gatsby-highlight" data-language="c"><pre class="language-c"><code class="language-c"><span class="token comment">/// Private.h</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">secret_wifi_ssid</span> <span class="token string">"your wifi ssid"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">secret_wifi_password</span> <span class="token string">"your wifi password"</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">secret_mqtt_server</span> <span class="token string">"ip of your mqtt server"</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">secret_clientName</span> <span class="token string">"whatever unique client name you want to use"</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">secret_mqtt_username</span> <span class="token string">"your mqtt user"</span> <span class="token comment">// or leave blank if not using</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">secret_mqtt_password</span> <span class="token string">"your mqtt pass"</span> <span class="token comment">// or leave blank if not using</span></span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">secret_local_timeclock_server</span> <span class="token string">"pool.ntp.org"</span></span>
+
+<span class="token comment">// Change these define according to your hardware</span>
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">METER_YEAR</span> <span class="token expression"><span class="token number">20</span> </span><span class="token comment">// last two digits (e.g. 2019 is 19)</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">METER_SERIAL</span> <span class="token expression"><span class="token number">123456</span> </span><span class="token comment">// your 6 digit serial</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">FREQUENCY</span> <span class="token expression"><span class="token number">433.700007</span> </span><span class="token comment">// you can test for this using the test code in everblu-meters-esp8266.cpp</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">GDO0</span> <span class="token expression"><span class="token number">5</span> </span><span class="token comment">//header 11 </span></span></code></pre></div>
+<p>We’ve not set up MQTT yet. More on this below - just come back to this config file once you’re ready.</p>
+<h1>Problem 2: Finding the right frequency</h1>
+<p>OK so now we can compile the code, we need to find the correct frequency. I mentioned before the transceiver works on 433MHz, but you need to calibrate it to work on the EXACT frequency to be a little lower/higher against your meter.</p>
+<p>I’ll defer this step back to the <a href="https://github.com/AdrianLThomas/everblu-meters-esp8266-improved?tab=readme-ov-file#frequency-adjustment">repo instructions</a>, but effectively there are some debug statements that you can uncomment that will write out to the serial monitor. Once you’ve found the correct one you can update your configuration accordingly (as per the snippet in the previous section).</p>
+<h1>Problem 3: Setting up MQTT</h1>
+<p>I’ll also gloss over this step too, but for me this was just a simple case of adding another container to my Docker Compose setup. I used <a href="https://hub.docker.com/_/eclipse-mosquitto">Eclipse Mosquitto</a>:</p>
+<div class="gatsby-highlight" data-language="yaml"><pre class="language-yaml"><code class="language-yaml"><span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">mosquitto</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> eclipse<span class="token punctuation">-</span>mosquitto<span class="token punctuation">:</span>latest
+    <span class="token key atrule">container_name</span><span class="token punctuation">:</span> mosquitto
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> unless<span class="token punctuation">-</span>stopped
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"1883:1883"</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> /your<span class="token punctuation">-</span>config<span class="token punctuation">-</span>path/mosquitto/config<span class="token punctuation">:</span>/mosquitto/config
+      <span class="token punctuation">-</span> /your<span class="token punctuation">-</span>config<span class="token punctuation">-</span>path/mosquitto/data<span class="token punctuation">:</span>/mosquitto/data
+      <span class="token punctuation">-</span> /your<span class="token punctuation">-</span>config<span class="token punctuation">-</span>path/mosquitto/log<span class="token punctuation">:</span>/mosquitto/log</code></pre></div>
+<h1>Problem 4: Device not being auto discovered in HA</h1>
+<p>The final issue I ran into was that the device was not being detected by HA.</p>
+<ol>
+<li>When connecting to the serial monitor, the device was connecting to the meter OK and outputting the data</li>
+<li>I could see that the ESP8266 had an IP address, so it must be connecting to the wifi fine</li>
+<li>Viewing the Mosquitto container logs showed that messages were being received as expected from the esp8266</li>
+<li>Manually subscribing to all topics (<code class="language-text">#</code>) in HA showed that messages were being received correctly</li>
+</ol>
+<p>..yet no device appeared in HA</p>
+<p>I enabled ‘debug logging’ for MQTT in HA:</p>
+<p><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; "
+    >
+      <a
+    class="gatsby-resp-image-link"
+    href="/static/cbe0410e4869f1e4c6e99309f0770fad/2e237/debugging-mqtt-1.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+    <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 62.65822784810127%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAA7DAAAOwwHHb6hkAAABnklEQVQ4y5WSS27bQBBEeQKJkij+PzPDn4ciaQqUV4K9yym09iInMBwdvuJqmAISJJC9KDSHzX5TNUNHaY1hGDCOI06nEzprkSQJlFJgb55PKMtS3mVZhjRNpf5L7DkcOhwOaNsWTV3DGCPDURSJCI7jGH4QIAgC+L6P/X4vlfI8D7vdTp7Zdwjo+wGlMQjD8AZbr9ei1Wol1XVdEQHsL4AlDWe32y0cbQysteKClikObDabP0QYnXiBh9cfr3j/+Y63X2+4Xq+4XC6Skps5VVVhGEYUeS67LUAC/gbSATcezYj5ccY8zzifz3JMdCmRtTY4Tkc5+MXl/4CsRVHA1CVsZ9F1nawZl3fAeacolNjVWt8FUvyuqmo5pjzPb7fLZ4IdNsdhlBf3IlOMxmPq+/6WinM3IBcL6B6QVSsloKZpBLzM0bkAl5u9C/yE8gKaphWHj9Mka7rkBpz7MnDzGdlohYe6gW1bUcrIUYT2u0A63Lku5rrGk7V4nibRy3TEVJboswz6u5G3vJQwhI5jGCpJUKUpVBSh8H2EHz/2b7yxW2xM49E6AAAAAElFTkSuQmCC'); background-size: cover; display: block;"
+  ></span>
+  <img
+        class="gatsby-resp-image-image"
+        alt="enabling debug logging for mqtt"
+        title="enabling debug logging for mqtt"
+        src="/static/cbe0410e4869f1e4c6e99309f0770fad/f058b/debugging-mqtt-1.png"
+        srcset="/static/cbe0410e4869f1e4c6e99309f0770fad/c26ae/debugging-mqtt-1.png 158w,
+/static/cbe0410e4869f1e4c6e99309f0770fad/6bdcf/debugging-mqtt-1.png 315w,
+/static/cbe0410e4869f1e4c6e99309f0770fad/f058b/debugging-mqtt-1.png 630w,
+/static/cbe0410e4869f1e4c6e99309f0770fad/2e237/debugging-mqtt-1.png 790w"
+        sizes="(max-width: 630px) 100vw, 630px"
+        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+        loading="lazy"
+        decoding="async"
+      />
+  </a>
+    </span></p>
+<p>and looked at the <em>system</em> logs.</p>
+<p><em>💡 Tip: this is NOT the activity logbook, but the logs under Settings > System > Logs</em></p>
+<p>I could then see what the error was:</p>
+<div class="gatsby-highlight" data-language="text"><pre class="language-text"><code class="language-text">Logger: homeassistant.components.mqtt.entity
+Source: components/mqtt/entity.py:155
+integration: MQTT (documentation, issues)
+First occurred: 02:11:02 (19 occurrences)
+Last logged: 10:38:09
+
+    Error 'extra keys not allowed @ data['device']['support_url']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_wifi_bssid/config', message: '{'unique_id': 'water_meter_wifi_bssid', 'object_id': 'water_meter_wifi_bssid', 'icon': 'mdi:access-point-network', 'qos': '0', 'state_topic': 'everblu/cyble/bssid', 'force_update': 'true', 'entity_category': 'diagnostic', 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'WiFi BSSID'}'
+    Error 'expected SensorDeviceClass or one of 'date', 'enum', 'timestamp', 'apparent_power', 'aqi', 'area', 'atmospheric_pressure', 'battery', 'blood_glucose_concentration', 'carbon_monoxide', 'carbon_dioxide', 'conductivity', 'current', 'data_rate', 'data_size', 'distance', 'duration', 'energy', 'energy_distance', 'energy_storage', 'frequency', 'gas', 'humidity', 'illuminance', 'irradiance', 'moisture', 'monetary', 'nitrogen_dioxide', 'nitrogen_monoxide', 'nitrous_oxide', 'ozone', 'ph', 'pm1', 'pm10', 'pm25', 'power_factor', 'power', 'precipitation', 'precipitation_intensity', 'pressure', 'reactive_power', 'signal_strength', 'sound_pressure', 'speed', 'sulphur_dioxide', 'temperature', 'volatile_organic_compounds', 'volatile_organic_compounds_parts', 'voltage', 'volume', 'volume_storage', 'volume_flow_rate', 'water', 'weight', 'wind_direction', 'wind_speed' for dictionary value @ data['device_class']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_wifi_status/config', message: '{'unique_id': 'water_meter_wifi_status', 'object_id': 'water_meter_wifi_status', 'device_class': 'connectivity', 'qos': '0', 'state_topic': 'everblu/cyble/status', 'force_update': 'true', 'entity_category': 'diagnostic', 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'WiFi Status'}'
+    Error 'extra keys not allowed @ data['device']['support_url']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_uptime/config', message: '{'unique_id': 'water_meter_uptime', 'object_id': 'water_meter_uptime', 'device_class': 'timestamp', 'qos': '0', 'state_topic': 'everblu/cyble/uptime', 'force_update': 'true', 'entity_category': 'diagnostic', 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'Device Uptime'}'
+    Error 'extra keys not allowed @ data['device']['support_url']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_wifi_signal_percentage/config', message: '{'unique_id': 'water_meter_wifi_signal_percentage', 'object_id': 'water_meter_wifi_signal_percentage', 'device_class': 'signal_strength', 'icon': 'mdi:wifi', 'unit_of_measurement': '%', 'qos': '0', 'state_topic': 'everblu/cyble/wifi_signal_percentage', 'force_update': 'true', 'entity_category': 'diagnostic', 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'WiFi Signal'}'
+    Error 'extra keys not allowed @ data['device']['support_url']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_value/config', message: '{'unique_id': 'water_meter_value', 'object_id': 'water_meter_value', 'icon': 'mdi:water', 'unit_of_measurement': 'L', 'device_class': 'water', 'state_class': 'total_increasing', 'qos': 0, 'state_topic': 'everblu/cyble/liters', 'force_update': True, 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'Reading (Total)'}'</code></pre></div>
+<p>As you can see there are some errors regarding the <code class="language-text">support_url</code> field. Removing this invalid field in the schema (and some other minor tweaks) in the PR resolved the issue and the device became available in HA! 🎉</p>
+<h1>Result, and what next?</h1>
+<p><span
+      class="gatsby-resp-image-wrapper"
+      style="position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; "
+    >
+      <a
+    class="gatsby-resp-image-link"
+    href="/static/7f84278fd76bf7800a8cd1012ee359c0/5b4a1/water-meter-ha.png"
+    style="display: block"
+    target="_blank"
+    rel="noopener"
+  >
+    <span
+    class="gatsby-resp-image-background-image"
+    style="padding-bottom: 103.16455696202532%; position: relative; bottom: 0; left: 0; background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAVCAYAAABG1c6oAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAC3UlEQVQ4y51UWXLqMBDkBIEEvEiy5E3ybiAYTKhU7n+sfjVjDAHy9T6mSsuoNdPd0uJ4PGIYDsjyDFJKREoiiqL/jsV6vcYUH1h7HtaBwLz28fFxi3ve+s/9OWexWq3AsVzi3fOxkgbv7+9TwmbzAkB7FDTf/N7fbHh9MScsl0voKMJ4HDAcBnRdyxQopW5B8+FwwDiOSJIEQghejyIFrRR8338EJA52ux1H0zSw1sI5h6IooLWGkBK5q1BVFa/RPgGrSEOl+Ssg3dZte/Rdj7pu+BAdpoNUnZQKJk5ROIu6rqZL8xzKxFCufgJcLSF9CStyZFn6p4JhGCJMHfysgm9bBCaDCEMookYIeJ53B1wRYKBgkxa2brjFGYjGJo4RBCG0iaGNgVQRU0A8UlAHJNIvwBW8IECQOfgmvyVN3lSIrmMSZBgGxHF8FeTewUPLBEgLpLTRU1UEym0KCT8yEMRhalEUjoUjwQiUuOy6DkEQPNlGaxxPJ4znM87nM4uRJjFSW0D1RxYlzhwK5x4qpIvzPOfLb4Bvb29sgZ+fH3x/f+NEwOOIr68vnndtA6E00rJHVZbsAKYjihiMqnypkG6q65pboWrnMEZDhgGEipAWLaqq5BaNMVxllmUoy/IRkDikBTaqUjyewkcQCvhkESFhMstUlFV1y6VKCfxPDi+XC6s4vxDiq2haJLtxMnaSoS4LbLsW7mp4Mj9V/KDyzOEMSBySMF+XC8bTCbttP73drIC0FaRroJKcLTWL82IbUilmAwc3w3KQdXyPDwRKw1cGvk54THuc85exCdBdLcGHZw6FgpeWfPBzt8VpGHA8fMLZnGmYjf/yORCxZBtqtW1bbLdb9F2Hfv8J93lmUWxZY7/bgX56ulxKwZ+DfP4ciMM0TZnD/X6Pw+Fw45LGXVNzWzq1MGmGxDqYOJmq0wbR8/c1P735kT+E53EQBSovIWyNsOghUzsBqvsH+w+HqTNu+nnx6QAAAABJRU5ErkJggg=='); background-size: cover; display: block;"
+  ></span>
+  <img
+        class="gatsby-resp-image-image"
+        alt="A screenshot of the water meter in Home Assistant"
+        title="A screenshot of the water meter in Home Assistant"
+        src="/static/7f84278fd76bf7800a8cd1012ee359c0/f058b/water-meter-ha.png"
+        srcset="/static/7f84278fd76bf7800a8cd1012ee359c0/c26ae/water-meter-ha.png 158w,
+/static/7f84278fd76bf7800a8cd1012ee359c0/6bdcf/water-meter-ha.png 315w,
+/static/7f84278fd76bf7800a8cd1012ee359c0/f058b/water-meter-ha.png 630w,
+/static/7f84278fd76bf7800a8cd1012ee359c0/5b4a1/water-meter-ha.png 831w"
+        sizes="(max-width: 630px) 100vw, 630px"
+        style="width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;"
+        loading="lazy"
+        decoding="async"
+      />
+  </a>
+    </span></p>
+<p>Now I just need to tidy up those wires and 3D print a tidy little case to hide it away in the pantry.</p>
+<p>You can find my <a href="https://github.com/AdrianLThomas/everblu-meters-esp8266-improved">fork here</a> or if you prefer to view the diff see the <a href="https://github.com/genestealer/everblu-meters-esp8266-improved/pull/3">PR to the maintainer here</a>.</p></section></article></main></div><footer class="layout__Footer-sc-rvd8xs-0 fVXSPP"><span>© <!-- -->2025<!-- --> <!-- --><a href="/">adrian-thomas.com</a></span><a href="https://github.com/AdrianLThomas" target="_blank" rel="noreferrer">GitHub</a><a href="https://twitter.com/AdrianLThomas" target="_blank" rel="noreferrer">Twitter</a><a href="https://www.linkedin.com/in/adrianthomas" target="_blank" rel="noreferrer">LinkedIn</a><a href="/blog">Blog</a><a target="_blank" rel="noreferrer" href="/rss.xml">RSS</a></footer></div></div><div id="gatsby-announcer" style="position:absolute;top:0;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border:0" aria-live="assertive" aria-atomic="true"></div></div><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-39403JZPVT"></script><script>
+      
+      
+      if(true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){window.dataLayer && window.dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-39403JZPVT', {"send_page_view":false});
+      }
+      </script><script id="gatsby-script-loader">/*<![CDATA[*/window.pagePath="/blog/2025-03-17/reading-my-water-meter-in-home-assistant/";window.___webpackCompilationHash="730360eb05f7a82349ac";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"polyfill":["/polyfill-55b8df5f151e72b5d2dc.js"],"app":["/app-dad061e5f536956a6be2.js"],"component---src-pages-404-js":["/component---src-pages-404-js-2995d574669c13b134ac.js"],"component---src-pages-blog-js":["/component---src-pages-blog-js-b975a10a9d0c7a31f30b.js"],"component---src-templates-blog-post-js":["/component---src-templates-blog-post-js-0b182b8b6135f0b205f7.js"]};/*]]>*/</script><script src="/polyfill-55b8df5f151e72b5d2dc.js" nomodule=""></script><script src="/component---src-templates-blog-post-js-0b182b8b6135f0b205f7.js" async=""></script><script src="/commons-1d6544cb43ed1fc99bce.js" async=""></script><script src="/app-dad061e5f536956a6be2.js" async=""></script><script src="/framework-0613c9735af2d6569ef8.js" async=""></script><script src="/webpack-runtime-83d24ad685577667119e.js" async=""></script></body></html>
