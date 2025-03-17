@@ -157,7 +157,7 @@ Last logged: 10:38:09
 
 As you can see there are some errors regarding the `support_url` field. Removing this invalid field in the schema (and some other minor tweaks) in the PR resolved the issue and the device became available in HA! 🎉
 
-# Result, and what next?
+# Result! What's next?
 ![A screenshot of the water meter in Home Assistant](./water-meter-ha.png)
 
 Now I just need to tidy up those wires and 3D print a tidy little case to hide it away in the pantry.
