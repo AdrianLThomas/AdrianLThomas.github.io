@@ -1,10 +1,10 @@
 ---
 title: Reading my water meter in Home Assistant
 date: "2025-03-17"
-description: Water bills in the UK are going up, again, and I thought it would be a nice to keep a closer eye on the household usage by integrating the water meter in to Home Assistant. Learn how I used an ESP8266 and CC1101 to read from an Irton EverBlu Cyble water meter, and some of the problems I hit along the way.
+description: Water bills in the UK are going up, again, and I thought it would be nice to keep a closer eye on the household usage by integrating the water meter in to Home Assistant. Learn how I used an ESP8266 and CC1101 to read from an Irton EverBlu Cyble water meter, and some of the problems I hit along the way.
 ---
 
-Water bills in the UK [are going up, again](https://www.bbc.co.uk/news/articles/c5yd9qzx79go), and I thought it would be a nice to keep a closer eye on the household usage by integrating the water meter in to [Home Assistant](https://www.home-assistant.io/).
+Water bills in the UK [are going up, again](https://www.bbc.co.uk/news/articles/c5yd9qzx79go), and I thought it would be nice to keep a closer eye on the household usage by integrating the water meter in to [Home Assistant](https://www.home-assistant.io/).
 
 # What I wanted to do
 I wanted the water meter readings in Home Assistant so perhaps I could set up alerts and generally try to reduce how much water was being used (and identify when/where it gets used the most). 
@@ -13,16 +13,16 @@ I wanted the water meter readings in Home Assistant so perhaps I could set up al
 I already had Home Assistant set up, but it's simple enough to get started if you're already self hosting things [with Docker](https://www.home-assistant.io/installation/linux#docker-compose) (e.g. homelab, raspberry pi or an off the shelf device). There's quite a [few options available](https://www.home-assistant.io/installation/).
 
 # The Solution
-The solution for you could well differ to mine, there's a ton of [options documented to read your water meter](https://www.home-assistant.io/docs/energy/water/), but in my case I had an Irton EverBlu Cyble water meter, that AFAIK is fairly common in the UK. So the first step would be identify what you have so that you can work out how to read it.
+The solution for you could well differ from mine, there's a ton of [options documented to read your water meter](https://www.home-assistant.io/docs/energy/water/), but in my case I had an Irton EverBlu Cyble water meter, that as far as I know is fairly common in the UK. So the first step would be identify what you have so that you can work out how to read it.
 
 I came [across this post on the HA forum](https://community.home-assistant.io/t/reading-itron-everblu-cyble-rf-enhanced-water-meter-with-esp32-esp8266-and-433mhz-cc1101-home-assistant-mqtt-autodiscovery/833180) describing a solution for reading my meter using a 433MHz transceiver (the same way the water company reads the meter from the van outside your house).
 
 I already had some spare ESP8266's around, so just needed a CC1101 transceiver which only cost a few quid off Amazon.
 
 ## ESP.. what?
-The ESP8266 is a very cheap microcontroller (as in only a few pounds), with built in WiFi and Bluetooth.
+The ESP8266 is a very cheap microcontroller (as in only a few pounds), with built in WiFi.
 
-They're not very powerful (80-160MHz), but the type of stuff you will be doing with them doesn't often require much power. If you've ever used an Arduino or used the SPI pins on a Raspberry Pi, you'll feel right at home.
+They're not very powerful (80-160MHz), but for most IoT projects they don't need to be. If you've ever used an Arduino or used the SPI pins on a Raspberry Pi, you'll feel right at home.
 
 ![a picture of an ESP8266](./esp8266.png "ESP8266")
 
@@ -74,7 +74,7 @@ Previously when tinkering with the ESP8266 I just used the Arduino IDE - it's fa
 
 However this project wasn't using either, but I did spot there was a `platformio.ini` file. That means this repo is a [PlatformIO](https://platformio.org/) project: effectively a VS Code extension to compile, debug, test and upload code to various IoT devices. It's new to me but looks pretty nice, and I look forward to trying it out more in the future.
 
-_Setting up VSCode and PlatformIO is straightforward so I'll leave Google to handle that for you._
+_Setting up VSCode and PlatformIO are straightforward so I'll leave Google to handle that for you._
 
 Finally, you need to configure some private variables as part of the build:
 ```c
@@ -98,7 +98,7 @@ Finally, you need to configure some private variables as part of the build:
 #define GDO0 5 //header 11 
 ```
 
-We've not set up MQTT yet, more on this below - so just come back to this config file once you're ready.
+We've not set up MQTT yet. More on this below - just come back to this config file once you're ready.
 
 # Problem 2: Finding the right frequency
 OK so now we can compile the code, we need to find the correct frequency. I mentioned before the transceiver works on 433MHz, but you need to calibrate it to work on the EXACT frequency to be a little lower/higher against your meter.
@@ -123,7 +123,7 @@ services:
 ```
 
 # Problem 4: Device not being auto discovered in HA
-The final problem I had was that the device was not showing in HA.
+The final issue I ran into was that the device was not being detected by HA.
 
 1. When connecting to the serial monitor, the device was connecting to the meter OK and outputting the data
 1. I could see that the ESP8266 had an IP address, so it must be connecting to the wifi fine
@@ -132,7 +132,7 @@ The final problem I had was that the device was not showing in HA.
 
 ..yet no device appeared in HA
 
-I enabled debugging logging for MQTT in HA:
+I enabled 'debug logging' for MQTT in HA:
 
 ![enabling debug logging for mqtt](./debugging-mqtt-1.png "enabling debug logging for mqtt")
 
