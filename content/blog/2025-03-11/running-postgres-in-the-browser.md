@@ -229,7 +229,7 @@ await client.query(`
 _If you're storing your data in IndexedDB then you'll also want to query if the data has already been imported before doing so (to avoid doing so on each load!)._
 
 ## Import/Export alternative with PGlite
-PGlite also supports exporting to a tarball with [dumpDataDir](https://pglite.dev/docs/api#dumpdatadir), and importing with [loadDataDir](https://pglite.dev/docs/api#options). Here you can provide an [(example of both)](https://pglite.dev/examples/dump-data-dir)
+PGlite also supports exporting to a tarball with [dumpDataDir](https://pglite.dev/docs/api#dumpdatadir), and importing with [loadDataDir](https://pglite.dev/docs/api#options). Here's an [(example of both)](https://pglite.dev/examples/dump-data-dir)
 
 # SQL Client
 You might be tempted to reach for your favourite Postgres client (and/or Drizzle Studio). Unfortunately you cannot use it (there's no endpoint to connect to!).
