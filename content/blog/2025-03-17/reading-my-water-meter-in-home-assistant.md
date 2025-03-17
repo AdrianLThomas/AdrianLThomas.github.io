@@ -86,8 +86,8 @@ Finally, you need to configure some private variables as part of the build:
 #define secret_mqtt_server "ip of your mqtt server"
 #define secret_clientName "whatever unique client name you want to use"
 
-#define secret_mqtt_username "your mqtt user"
-#define secret_mqtt_password "your mqtt pass"
+#define secret_mqtt_username "your mqtt user" // or leave blank if not using
+#define secret_mqtt_password "your mqtt pass" // or leave blank if not using
 
 #define secret_local_timeclock_server "pool.ntp.org"
 
@@ -107,8 +107,21 @@ OK so now we can compile the code, we need to find the correct frequency. I ment
 I'll defer this step back to the [repo instructions](https://github.com/AdrianLThomas/everblu-meters-esp8266-improved?tab=readme-ov-file#frequency-adjustment), but effectively there are some debug statements that you can uncomment that will write out to the serial monitor. Once you've found the correct one you can update your configuration accordingly (as per the snippet in the previous section).
 
 # Problem 4: Setting up MQTT
-... setting up container... simple... but creating password etc too. TODO
-setup mqtt (out of scope), but I run this image here: https://hub.docker.com/_/eclipse-mosquitto
+I'll also gloss over this step too, but for me this was just a simple case of adding another container to my Docker Compose setup. I used [Eclipse Mosquitto](https://hub.docker.com/_/eclipse-mosquitto):
+
+```yaml
+services:
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - /your-config-path/mosquitto/config:/mosquitto/config
+      - /your-config-path/mosquitto/data:/mosquitto/data
+      - /your-config-path/mosquitto/log:/mosquitto/log
+```
 
 # Problem 5: Device not being auto discovered in HA
 see PR. was bad json schema. TODO
