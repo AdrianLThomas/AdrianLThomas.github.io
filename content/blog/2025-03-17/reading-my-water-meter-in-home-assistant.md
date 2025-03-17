@@ -1,13 +1,13 @@
 ---
 title: Reading my water meter in Home Assistant
 date: "2025-03-17"
-description: TODO based on content
+description: Water bills in the UK are going up, again, and I thought it would be a nice to keep a closer eye on the household usage by integrating the water meter in to Home Assistant. Learn how I used an ESP8266 and CC1101 to read from an Irton EverBlu Cyble water meter, and some of the problems I hit along the way.
 ---
 
 Water bills in the UK [are going up, again](https://www.bbc.co.uk/news/articles/c5yd9qzx79go), and I thought it would be a nice to keep a closer eye on the household usage by integrating the water meter in to [Home Assistant](https://www.home-assistant.io/).
 
 # What I wanted to do
-I wanted the data in Home Assistant so perhaps I could set up alerts and generally try to reduce how much water was being used (and identify when/where it gets used the most). 
+I wanted the water meter readings in Home Assistant so perhaps I could set up alerts and generally try to reduce how much water was being used (and identify when/where it gets used the most). 
 
 ## Setting up HA (Home Assistant)
 I already had Home Assistant set up, but it's simple enough to get started if you're already self hosting things [with Docker](https://www.home-assistant.io/installation/linux#docker-compose) (e.g. homelab, raspberry pi or an off the shelf device). There's quite a [few options available](https://www.home-assistant.io/installation/).
@@ -22,7 +22,7 @@ I already had some spare ESP8266's around, so just needed a CC1101 transceiver w
 ## ESP.. what?
 The ESP8266 is a very cheap microcontroller (as in only a few pounds), with built in WiFi and Bluetooth.
 
-They're not very powerful (80-160MHz), but the type of stuff you will be doing with them doesn't often require much power. If you've ever used at Arduino or used the SPI pins on a Raspberry Pi, you'll feel right at home.
+They're not very powerful (80-160MHz), but the type of stuff you will be doing with them doesn't often require much power. If you've ever used an Arduino or used the SPI pins on a Raspberry Pi, you'll feel right at home.
 
 ![a picture of an ESP8266](./esp8266.png "ESP8266")
 
@@ -34,7 +34,7 @@ Basically, you can use it to wirelessly read data from your meter.
 ![a picture of the CC1101 transceiver that operates at 433MHz](./cc1101.png "CC1101 transceiver - 433MHz")
 
 ## MQTT
-[MQTT](https://mqtt.org/) is a lightweight message queue, commonly used for IoT. We can publish the state of the water meter to it, and Home Assistant will subscribe to these updates accordingly.
+We'll be using [MQTT](https://mqtt.org/) for this. It is a lightweight message queue, commonly used for IoT. We can publish the state of the water meter to it, and Home Assistant will subscribe to these updates accordingly.
 
 # Getting started
 So if you want to follow along, I'm making the following assumptions:
@@ -44,7 +44,7 @@ So if you want to follow along, I'm making the following assumptions:
 1. You have a CC1101
 
 # Wiring up the CC1101 to the ESP8266
-When you buy a component like the CC1101 you normally get a pin out diagram, either from the manufacturer or you can find one online, that looks like this:
+When you buy a component like the CC1101 you normally get a pin out diagram, either from the manufacturer or you can find one online, that looks something like this:
 ![a diagram of the CC1101 pinout](./cc1101-pinout.png "CC1101 pin out")
 
 The code we're going to use provided this mapping table; so attach the CC1101 accordingly:
@@ -127,18 +127,20 @@ The final problem I had was that the device was not showing in HA.
 
 1. When connecting to the serial monitor, the device was connecting to the meter OK and outputting the data
 1. I could see that the ESP8266 had an IP address, so it must be connecting to the wifi fine
-1. Viewing the Mosquitto container logs showed that messages were being received as expected
+1. Viewing the Mosquitto container logs showed that messages were being received as expected from the esp8266
+1. Manually subscribing to all topics (`#`) in HA showed that messages were being received correctly 
 
-..yet no device appeared in HA.
+..yet no device appeared in HA
 
-To fix this:
-I enabled debugging logging for MQTT in HA
+I enabled debugging logging for MQTT in HA:
 
 ![enabling debug logging for mqtt](./debugging-mqtt-1.png "enabling debug logging for mqtt")
 
-and looked at the *system* logs. Note: this is NOT the activity logbook, but the logs under Settings > System > Logs.
+and looked at the *system* logs. 
 
-I could then see where the error was:
+_💡 Tip: this is NOT the activity logbook, but the logs under Settings > System > Logs_
+
+I could then see what the error was:
 ```
 Logger: homeassistant.components.mqtt.entity
 Source: components/mqtt/entity.py:155
@@ -153,11 +155,11 @@ Last logged: 10:38:09
     Error 'extra keys not allowed @ data['device']['support_url']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_value/config', message: '{'unique_id': 'water_meter_value', 'object_id': 'water_meter_value', 'icon': 'mdi:water', 'unit_of_measurement': 'L', 'device_class': 'water', 'state_class': 'total_increasing', 'qos': 0, 'state_topic': 'everblu/cyble/liters', 'force_update': True, 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'Reading (Total)'}'
 ```
 
-As you can see there are some errors regarding the `support_url` field. Removing this in the schema (and some other minor tweaks) in the PR resolved the issue and the device became available in HA! 🎉
+As you can see there are some errors regarding the `support_url` field. Removing this invalid field in the schema (and some other minor tweaks) in the PR resolved the issue and the device became available in HA! 🎉
 
 # Result, and what next?
 ![A screenshot of the water meter in Home Assistant](./water-meter-ha.png)
 
-I got there in the end. Now I just need to tidy up those wires and 3D print a tidy little case to hide it away in the pantry.
+Now I just need to tidy up those wires and 3D print a tidy little case to hide it away in the pantry.
 
 You can find my [fork here](https://github.com/AdrianLThomas/everblu-meters-esp8266-improved) or if you prefer to view the diff see the [PR to the maintainer here](https://github.com/genestealer/everblu-meters-esp8266-improved/pull/3).
