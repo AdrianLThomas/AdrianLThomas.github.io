@@ -68,11 +68,11 @@ You should then end up with something like this:
 # Problem 1: How do we compile this thing?
 OK so going back to the original forum post, the code takes us to [this repository](https://github.com/genestealer/everblu-meters-esp8266-improved) that is a fork of some older code. I had some issues (documentation and code changes), so of course I forked the fork, and you can [find it here](https://github.com/AdrianLThomas/everblu-meters-esp8266-improved). This fork will remain the basis of what I refer to for the rest of the blog post.
 
-_Of course, I raised a PR for the original maintainer, but at the time of writing it hasn't yet been merged._
+_I raised a PR for the original maintainer, but at the time of writing it hasn't yet been merged._
 
 Previously when tinkering with the ESP8266 I just used the Arduino IDE - it's fairly straightforward to get up and running. You write some C, compile, upload, and away you go. I'd also used [ESPHome](https://esphome.io/) which is a really nice declarative way to wire up components just using YAML.
 
-However this project wasn't using either, but I did spot there was a `platformio.ini` file. This is now a [PlatformIO](https://platformio.org/) project: effectively a VS Code extension to compile, debug, test and upload code to various IoT devices. It's new to me but looks pretty nice, and I look forward to trying it out more in the future.
+However this project wasn't using either, but I did spot there was a `platformio.ini` file. That means this repo is a [PlatformIO](https://platformio.org/) project: effectively a VS Code extension to compile, debug, test and upload code to various IoT devices. It's new to me but looks pretty nice, and I look forward to trying it out more in the future.
 
 _Setting up VSCode and PlatformIO is straightforward so I'll leave Google to handle that for you._
 
@@ -93,7 +93,7 @@ Finally, you need to configure some private variables as part of the build:
 // Change these define according to your hardware
 
 #define METER_YEAR 20 // last two digits (e.g. 2019 is 19)
-#define METER_SERIAL 257000
+#define METER_SERIAL 123456 // your 6 digit serial
 #define FREQUENCY 433.700007 // you can test for this using the test code in everblu-meters-esp8266.cpp
 #define GDO0 5 //header 11 
 ```
