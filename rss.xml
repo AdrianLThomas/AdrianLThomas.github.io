@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Adrian L Thomas]]></title><description><![CDATA[Pizza, programming and cars - sometimes in that order.]]></description><link>https://www.adrian-thomas.com</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 17 Mar 2025 16:59:33 GMT</lastBuildDate><item><title><![CDATA[Reading my water meter in Home Assistant]]></title><description><![CDATA[Water bills in the UK are going up, again, and I thought it would be nice to keep a closer eye on the household usage by integrating the…]]></description><link>https://www.adrian-thomas.com/blog/2025-03-17/reading-my-water-meter-in-home-assistant/</link><guid isPermaLink="false">https://www.adrian-thomas.com/blog/2025-03-17/reading-my-water-meter-in-home-assistant/</guid><pubDate>Mon, 17 Mar 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Water bills in the UK &lt;a href=&quot;https://www.bbc.co.uk/news/articles/c5yd9qzx79go&quot;&gt;are going up, again&lt;/a&gt;, and I thought it would be nice to keep a closer eye on the household usage by integrating the water meter in to &lt;a href=&quot;https://www.home-assistant.io/&quot;&gt;Home Assistant&lt;/a&gt;.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Adrian L Thomas]]></title><description><![CDATA[Pizza, programming and cars - sometimes in that order.]]></description><link>https://www.adrian-thomas.com</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 17 Mar 2025 17:08:14 GMT</lastBuildDate><item><title><![CDATA[Reading my water meter in Home Assistant]]></title><description><![CDATA[Water bills in the UK are going up, again, and I thought it would be nice to keep a closer eye on the household usage by integrating the…]]></description><link>https://www.adrian-thomas.com/blog/2025-03-17/reading-my-water-meter-in-home-assistant/</link><guid isPermaLink="false">https://www.adrian-thomas.com/blog/2025-03-17/reading-my-water-meter-in-home-assistant/</guid><pubDate>Mon, 17 Mar 2025 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Water bills in the UK &lt;a href=&quot;https://www.bbc.co.uk/news/articles/c5yd9qzx79go&quot;&gt;are going up, again&lt;/a&gt;, and I thought it would be nice to keep a closer eye on the household usage by integrating the water meter in to &lt;a href=&quot;https://www.home-assistant.io/&quot;&gt;Home Assistant&lt;/a&gt;.&lt;/p&gt;
 &lt;h1&gt;What I wanted to do&lt;/h1&gt;
 &lt;p&gt;I wanted the water meter readings in Home Assistant so perhaps I could set up alerts and generally try to reduce how much water was being used (and identify when/where it gets used the most).&lt;/p&gt;
 &lt;h2&gt;Setting up HA (Home Assistant)&lt;/h2&gt;
@@ -309,29 +309,28 @@ Last logged: 10:38:09
 &lt;h1&gt;Result, and what next?&lt;/h1&gt;
 &lt;p&gt;&lt;span
       class=&quot;gatsby-resp-image-wrapper&quot;
-      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 630px; &quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto; max-width: 331px; &quot;
     &gt;
       &lt;a
     class=&quot;gatsby-resp-image-link&quot;
-    href=&quot;/static/7f84278fd76bf7800a8cd1012ee359c0/5b4a1/water-meter-ha.png&quot;
+    href=&quot;/static/f48391176a4c0e875aafd6da75247d83/62452/water-meter-ha.png&quot;
     style=&quot;display: block&quot;
     target=&quot;_blank&quot;
     rel=&quot;noopener&quot;
   &gt;
     &lt;span
     class=&quot;gatsby-resp-image-background-image&quot;
-    style=&quot;padding-bottom: 103.16455696202532%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAVCAYAAABG1c6oAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAC3UlEQVQ4y51UWXLqMBDkBIEEvEiy5E3ybiAYTKhU7n+sfjVjDAHy9T6mSsuoNdPd0uJ4PGIYDsjyDFJKREoiiqL/jsV6vcYUH1h7HtaBwLz28fFxi3ve+s/9OWexWq3AsVzi3fOxkgbv7+9TwmbzAkB7FDTf/N7fbHh9MScsl0voKMJ4HDAcBnRdyxQopW5B8+FwwDiOSJIEQghejyIFrRR8338EJA52ux1H0zSw1sI5h6IooLWGkBK5q1BVFa/RPgGrSEOl+Ssg3dZte/Rdj7pu+BAdpoNUnZQKJk5ROIu6rqZL8xzKxFCufgJcLSF9CStyZFn6p4JhGCJMHfysgm9bBCaDCEMookYIeJ53B1wRYKBgkxa2brjFGYjGJo4RBCG0iaGNgVQRU0A8UlAHJNIvwBW8IECQOfgmvyVN3lSIrmMSZBgGxHF8FeTewUPLBEgLpLTRU1UEym0KCT8yEMRhalEUjoUjwQiUuOy6DkEQPNlGaxxPJ4znM87nM4uRJjFSW0D1RxYlzhwK5x4qpIvzPOfLb4Bvb29sgZ+fH3x/f+NEwOOIr68vnndtA6E00rJHVZbsAKYjihiMqnypkG6q65pboWrnMEZDhgGEipAWLaqq5BaNMVxllmUoy/IRkDikBTaqUjyewkcQCvhkESFhMstUlFV1y6VKCfxPDi+XC6s4vxDiq2haJLtxMnaSoS4LbLsW7mp4Mj9V/KDyzOEMSBySMF+XC8bTCbttP73drIC0FaRroJKcLTWL82IbUilmAwc3w3KQdXyPDwRKw1cGvk54THuc85exCdBdLcGHZw6FgpeWfPBzt8VpGHA8fMLZnGmYjf/yORCxZBtqtW1bbLdb9F2Hfv8J93lmUWxZY7/bgX56ulxKwZ+DfP4ciMM0TZnD/X6Pw+Fw45LGXVNzWzq1MGmGxDqYOJmq0wbR8/c1P735kT+E53EQBSovIWyNsOghUzsBqvsH+w+HqTNu+nnx6QAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    style=&quot;padding-bottom: 116.45569620253164%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAXCAIAAACEf/j0AAAACXBIWXMAAA7CAAAOwgEVKEqAAAACnUlEQVQ4y41U7W7iMBDkFXqJk107sTEhX0AaTBqOFMJHWwGNwlXVPUD/3fs/wl3iQilUp44cS5Y93tnNeDuEEESkn4HfACGkQykVQiCi3QIAENH9BiilHdM0l8vl29vb4XB4fX19eXmZz+cA4Lqu8180ZACIoqgo7ieTyWw2y7IsSRLHcfT156e/iNymCMQ0AJGYDQghAKBTYIydyDojvaVL0wGb9EdZlK8pWGOlNptNURSr1Wq9Xs/ncyml5ruuu16v8zzXu+PxGAA6CHY3GPQGiiKEYZim6Wg0StN0PB4rpU5kx3Fub2/jOE6SRCmVJElDppQxBGoT1+W2bRuGYZqmfcSXsg3D0Mo7QIwwWyWb37Z5Myvu67ouy7LX62mp1wXjnFdVlee5ZVkdtK1enPrpjILtB8GghRDiPOYFP47jfr+PiE21HUYZRcd1T0UGgC+ZJ29pU3Zs82ZYHrLDHwRLqcluvy/L8vn5OQiC5t4zTKfTx8fHsix3u12WZbZtN9WWwdAbZYxSKaXv+1LKIAg45xeRhRC+73ueF8ex53lH2c5HetrYiHgtmzGmvcEYe3cYWMRPZ6PlL4pYFEVd19ohVVUppS6U63uTJDnKRuTSE1540uY4Dm+ho108Bo0Pb7d3Nie73S7nXAjBOZdS6uWJyTn3PE9K6Xke57zJufV2Hs+2YJlFa5Kqqh4eHhaLRV3XURTpKlBKoyja7/dPT0/b7TaO49aeiC4Xbrenc2o+zkVXNmJc7nw2mc5Cz++y29cJnNFmOIwz5MflxRvmZ9Dkxls4vKPhiIYJDRMcTjCZ4kDhMHO4OP+Rl52kiSy6mK3YcEKHGd7+RDXHu1Uzq4UrpHvVQz46ie4baP5AizSDmEiM0wB4t/o1/nXPvwaRss4Vqq6OAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
   &gt;&lt;/span&gt;
   &lt;img
         class=&quot;gatsby-resp-image-image&quot;
         alt=&quot;A screenshot of the water meter in Home Assistant&quot;
         title=&quot;A screenshot of the water meter in Home Assistant&quot;
-        src=&quot;/static/7f84278fd76bf7800a8cd1012ee359c0/f058b/water-meter-ha.png&quot;
-        srcset=&quot;/static/7f84278fd76bf7800a8cd1012ee359c0/c26ae/water-meter-ha.png 158w,
-/static/7f84278fd76bf7800a8cd1012ee359c0/6bdcf/water-meter-ha.png 315w,
-/static/7f84278fd76bf7800a8cd1012ee359c0/f058b/water-meter-ha.png 630w,
-/static/7f84278fd76bf7800a8cd1012ee359c0/5b4a1/water-meter-ha.png 831w&quot;
-        sizes=&quot;(max-width: 630px) 100vw, 630px&quot;
+        src=&quot;/static/f48391176a4c0e875aafd6da75247d83/62452/water-meter-ha.png&quot;
+        srcset=&quot;/static/f48391176a4c0e875aafd6da75247d83/c26ae/water-meter-ha.png 158w,
+/static/f48391176a4c0e875aafd6da75247d83/6bdcf/water-meter-ha.png 315w,
+/static/f48391176a4c0e875aafd6da75247d83/62452/water-meter-ha.png 331w&quot;
+        sizes=&quot;(max-width: 331px) 100vw, 331px&quot;
         style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
         loading=&quot;lazy&quot;
         decoding=&quot;async&quot;
