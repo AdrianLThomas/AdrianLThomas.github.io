@@ -65,12 +65,11 @@ _The original table can be found in the source repository `README.md`_
 You should then end up with something like this:
 ![esp8266 wired up to a cc1101](./esp8266-wired-up.jpg "esp8266 wired up to a cc1101")
 
-# Problem 1: How to compile the code?
+# Problem 1: How do we compile this thing?
 OK so going back to the original forum post, the code takes us to [this repository](https://github.com/genestealer/everblu-meters-esp8266-improved) that is a fork of some older code. I had some issues (documentation and code changes), so of course I forked the fork, and you can [find it here](https://github.com/AdrianLThomas/everblu-meters-esp8266-improved). This fork will remain the basis of what I refer to for the rest of the blog post.
 
 _Of course, I raised a PR for the original maintainer, but at the time of writing it hasn't yet been merged._
 
-# Problem 2: How do we compile this thing?
 Previously when tinkering with the ESP8266 I just used the Arduino IDE - it's fairly straightforward to get up and running. You write some C, compile, upload, and away you go. I'd also used [ESPHome](https://esphome.io/) which is a really nice declarative way to wire up components just using YAML.
 
 However this project wasn't using either, but I did spot there was a `platformio.ini` file. This is now a [PlatformIO](https://platformio.org/) project: effectively a VS Code extension to compile, debug, test and upload code to various IoT devices. It's new to me but looks pretty nice, and I look forward to trying it out more in the future.
@@ -101,12 +100,12 @@ Finally, you need to configure some private variables as part of the build:
 
 We've not set up MQTT yet, more on this soon - so just come back to this config file once you're ready.
 
-# Problem 3: Finding the right frequency
+# Problem 2: Finding the right frequency
 OK so now we can compile the code, we need to find the correct frequency. I mentioned before the transceiver works on 433MHz, but you need to calibrate it to work on the EXACT frequency to be a little lower/higher against your meter.
 
 I'll defer this step back to the [repo instructions](https://github.com/AdrianLThomas/everblu-meters-esp8266-improved?tab=readme-ov-file#frequency-adjustment), but effectively there are some debug statements that you can uncomment that will write out to the serial monitor. Once you've found the correct one you can update your configuration accordingly (as per the snippet in the previous section).
 
-# Problem 4: Setting up MQTT
+# Problem 3: Setting up MQTT
 I'll also gloss over this step too, but for me this was just a simple case of adding another container to my Docker Compose setup. I used [Eclipse Mosquitto](https://hub.docker.com/_/eclipse-mosquitto):
 
 ```yaml
@@ -123,7 +122,7 @@ services:
       - /your-config-path/mosquitto/log:/mosquitto/log
 ```
 
-# Problem 5: Device not being auto discovered in HA
+# Problem 4: Device not being auto discovered in HA
 see PR. was bad json schema. TODO
 
 got everything wired up, but nothing showing in HA.
