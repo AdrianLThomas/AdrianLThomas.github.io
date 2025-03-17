@@ -126,6 +126,14 @@ services:
 # Problem 5: Device not being auto discovered in HA
 see PR. was bad json schema. TODO
 
+got everything wired up, but nothing showing in HA.
+
+I could listen to the # topic, saw messages, but no devices.
+
+turned on debugging mqtt and checked logs.... copy paste errors from chatgpt chat.
+
+saw messages complaining about the json payload. fixed this up and viola.
+
 # Result
 screenshot of HA. TODO
 picture of setup? maybe put this at the start? wires etc
@@ -133,11 +141,6 @@ picture of setup? maybe put this at the start? wires etc
 code can be found here: TODO
 my pr: https://github.com/genestealer/everblu-meters-esp8266-improved/pull/3
 
-# Side Notes
-I did this with WSL on Windows, and to get the serial adapter to work from Windows > WSL I needed to install and use this tool:
-found this post to get usb port mapped to wsl: https://askubuntu.com/questions/1461302/i-need-help-connecting-serial-ports-to-ubuntu-in-wsl
-
-out of scope for the blog post maybe...
 
 # Next
 3d print a case to tidy it up and tidy up the solution. TODO
