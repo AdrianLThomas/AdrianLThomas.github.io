@@ -123,25 +123,41 @@ services:
 ```
 
 # Problem 4: Device not being auto discovered in HA
-see PR. was bad json schema. TODO
+The final problem I had was that the device was not showing in HA.
 
-got everything wired up, but nothing showing in HA.
+1. When connecting to the serial monitor, the device was connecting to the meter OK and outputting the data
+1. I could see that the ESP8266 had an IP address, so it must be connecting to the wifi fine
+1. Viewing the Mosquitto container logs showed that messages were being received as expected
 
-I could listen to the # topic, saw messages, but no devices.
+..yet no device appeared in HA.
 
-turned on debugging mqtt and checked logs.... copy paste errors from chatgpt chat.
+To fix this:
+I enabled debugging logging for MQTT in HA
 
-saw messages complaining about the json payload. fixed this up and viola.
+![enabling debug logging for mqtt](./debugging-mqtt-1.png "enabling debug logging for mqtt")
 
-# Result
-screenshot of HA. TODO
-picture of setup? maybe put this at the start? wires etc
+and looked at the *system* logs. Note: this is NOT the activity logbook, but the logs under Settings > System > Logs.
 
-code can be found here: TODO
-my pr: https://github.com/genestealer/everblu-meters-esp8266-improved/pull/3
+I could then see where the error was:
+```
+Logger: homeassistant.components.mqtt.entity
+Source: components/mqtt/entity.py:155
+integration: MQTT (documentation, issues)
+First occurred: 02:11:02 (19 occurrences)
+Last logged: 10:38:09
 
+    Error 'extra keys not allowed @ data['device']['support_url']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_wifi_bssid/config', message: '{'unique_id': 'water_meter_wifi_bssid', 'object_id': 'water_meter_wifi_bssid', 'icon': 'mdi:access-point-network', 'qos': '0', 'state_topic': 'everblu/cyble/bssid', 'force_update': 'true', 'entity_category': 'diagnostic', 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'WiFi BSSID'}'
+    Error 'expected SensorDeviceClass or one of 'date', 'enum', 'timestamp', 'apparent_power', 'aqi', 'area', 'atmospheric_pressure', 'battery', 'blood_glucose_concentration', 'carbon_monoxide', 'carbon_dioxide', 'conductivity', 'current', 'data_rate', 'data_size', 'distance', 'duration', 'energy', 'energy_distance', 'energy_storage', 'frequency', 'gas', 'humidity', 'illuminance', 'irradiance', 'moisture', 'monetary', 'nitrogen_dioxide', 'nitrogen_monoxide', 'nitrous_oxide', 'ozone', 'ph', 'pm1', 'pm10', 'pm25', 'power_factor', 'power', 'precipitation', 'precipitation_intensity', 'pressure', 'reactive_power', 'signal_strength', 'sound_pressure', 'speed', 'sulphur_dioxide', 'temperature', 'volatile_organic_compounds', 'volatile_organic_compounds_parts', 'voltage', 'volume', 'volume_storage', 'volume_flow_rate', 'water', 'weight', 'wind_direction', 'wind_speed' for dictionary value @ data['device_class']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_wifi_status/config', message: '{'unique_id': 'water_meter_wifi_status', 'object_id': 'water_meter_wifi_status', 'device_class': 'connectivity', 'qos': '0', 'state_topic': 'everblu/cyble/status', 'force_update': 'true', 'entity_category': 'diagnostic', 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'WiFi Status'}'
+    Error 'extra keys not allowed @ data['device']['support_url']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_uptime/config', message: '{'unique_id': 'water_meter_uptime', 'object_id': 'water_meter_uptime', 'device_class': 'timestamp', 'qos': '0', 'state_topic': 'everblu/cyble/uptime', 'force_update': 'true', 'entity_category': 'diagnostic', 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'Device Uptime'}'
+    Error 'extra keys not allowed @ data['device']['support_url']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_wifi_signal_percentage/config', message: '{'unique_id': 'water_meter_wifi_signal_percentage', 'object_id': 'water_meter_wifi_signal_percentage', 'device_class': 'signal_strength', 'icon': 'mdi:wifi', 'unit_of_measurement': '%', 'qos': '0', 'state_topic': 'everblu/cyble/wifi_signal_percentage', 'force_update': 'true', 'entity_category': 'diagnostic', 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'WiFi Signal'}'
+    Error 'extra keys not allowed @ data['device']['support_url']' when processing MQTT discovery message topic: 'homeassistant/sensor/water_meter_value/config', message: '{'unique_id': 'water_meter_value', 'object_id': 'water_meter_value', 'icon': 'mdi:water', 'unit_of_measurement': 'L', 'device_class': 'water', 'state_class': 'total_increasing', 'qos': 0, 'state_topic': 'everblu/cyble/liters', 'force_update': True, 'device': {'identifiers': ['14071984'], 'model': 'Itron EverBlu Cyble Enhanced Water Meter ESP8266/ESP32', 'manufacturer': 'Psykokwak [Forked by Genestealer]', 'support_url': 'https://github.com/genestealer/everblu-meters-esp8266-improved', 'suggested_area': 'Home', 'name': 'Water Meter'}, 'name': 'Reading (Total)'}'
+```
 
-# Next
-3d print a case to tidy it up and tidy up the solution. TODO
+As you can see there are some errors regarding the `support_url` field. Removing this in the schema (and some other minor tweaks) in the PR resolved the issue and the device became available in HA! 🎉
 
-My plan for this is: get some examples on thingiverse, copy paste them in to tinkercard, stick it all together, hide it away in the pantry with the water meter.
+# Result, and what next?
+![A screenshot of the water meter in Home Assistant](./water-meter-ha.png)
+
+I got there in the end. Now I just need to tidy up those wires and 3D print a tidy little case to hide it away in the pantry.
+
+You can find my [fork here](https://github.com/AdrianLThomas/everblu-meters-esp8266-improved) or if you prefer to view the diff see the [PR to the maintainer here](https://github.com/genestealer/everblu-meters-esp8266-improved/pull/3).
