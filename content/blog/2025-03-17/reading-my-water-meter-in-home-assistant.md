@@ -15,7 +15,7 @@ I already had Home Assistant setup, but it's simple enough to get started if you
 # The Solution
 The solution for you could well differ to mine, there's a ton of [options documented for HA](https://www.home-assistant.io/docs/energy/water/), but in my case I had an Irton EverBlu Cyble water meter that AFAIK is fairly common in the UK. So the first step would be identify what you have so that you can work out how to read it.
 
-I came across this post on the [HA forum](https://community.home-assistant.io/t/reading-itron-everblu-cyble-rf-enhanced-water-meter-with-esp32-esp8266-and-433mhz-cc1101-home-assistant-mqtt-autodiscovery/833180) describing a solution for reading my meter using a 433MHz transceiver (the same way the water company reads the meter from the van outside your house).
+I came [across this post on the HA forum](https://community.home-assistant.io/t/reading-itron-everblu-cyble-rf-enhanced-water-meter-with-esp32-esp8266-and-433mhz-cc1101-home-assistant-mqtt-autodiscovery/833180) describing a solution for reading my meter using a 433MHz transceiver (the same way the water company reads the meter from the van outside your house).
 
 TODO picture.
 
