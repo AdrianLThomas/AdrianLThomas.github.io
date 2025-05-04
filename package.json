@@ -6,7 +6,7 @@
   "author": "Adrian L Thomas",
   "dependencies": {
     "babel-plugin-styled-components": "^2.0.6",
-    "gatsby": "^4.11.1",
+    "gatsby": "^5.7.0",
     "gatsby-plugin-feed": "^4.11.1",
     "gatsby-plugin-gatsby-cloud": "^4.11.1",
     "gatsby-plugin-google-gtag": "^4.11.0",
