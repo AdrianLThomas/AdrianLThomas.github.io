@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "author": "Adrian L Thomas",
   "dependencies": {
-    "babel-plugin-styled-components": "^2.0.6",
+    "babel-plugin-styled-components": "^2.0.7",
     "gatsby": "^4.11.1",
     "gatsby-plugin-feed": "^4.11.1",
     "gatsby-plugin-gatsby-cloud": "^4.11.1",
