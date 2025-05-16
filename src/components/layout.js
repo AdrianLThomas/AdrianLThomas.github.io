@@ -53,7 +53,6 @@ const Layout = ({ children }) => {
           }
           social {
             github
-            twitter
             linkedIn
           }
           siteUrl
@@ -80,14 +79,6 @@ const Layout = ({ children }) => {
           rel="noreferrer"
         >
           GitHub
-        </a>
-
-        <a
-          href={`https://twitter.com/${social.twitter}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Twitter
         </a>
 
         <a

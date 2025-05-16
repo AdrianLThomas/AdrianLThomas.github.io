@@ -20,7 +20,6 @@ const Seo = ({ description, lang, meta, title }) => {
             title
             description
             social {
-              twitter
               linkedIn
             }
           }
@@ -60,10 +59,6 @@ const Seo = ({ description, lang, meta, title }) => {
         {
           name: `twitter:card`,
           content: `summary`,
-        },
-        {
-          name: `twitter:creator`,
-          content: site.siteMetadata.social.twitter || ``,
         },
         {
           name: `twitter:title`,

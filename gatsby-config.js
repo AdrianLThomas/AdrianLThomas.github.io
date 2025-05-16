@@ -8,7 +8,6 @@ module.exports = {
     description: `Pizza, programming and cars - sometimes in that order.`,
     siteUrl: `https://www.adrian-thomas.com`,
     social: {
-      twitter: `AdrianLThomas`,
       github: `AdrianLThomas`,
       linkedIn: `adrianthomas`,
     },
