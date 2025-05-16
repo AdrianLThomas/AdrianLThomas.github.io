@@ -89,8 +89,6 @@ const Layout = ({ children }) => {
           LinkedIn
         </a>
 
-        <Link to="/blog">Blog</Link>
-
         <Link to="/rss.xml" target="_blank" rel="noreferrer">
           RSS
         </Link>
