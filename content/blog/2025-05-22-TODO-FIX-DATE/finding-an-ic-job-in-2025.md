@@ -1,29 +1,55 @@
 ---
 title: Finding an IC job in 2025
 date: "TODO"
-description: I'm fortunate to have secured a new role after my career break, and now wanted to reflect on my experience and share it with others, as an IC in 2025.
+description: I'm fortunate to have secured a new role as part of my career break, and now wanted to reflect on my experience and share it with others, as an IC in 2025.
 ---
 
-I made the decision earlier in the year to take a career break: It's not something I've ever done before (I've always had another job lined up), but knew I wanted some time to spend on myself, some hobbies, training. Which ultimately meant I'd need to find a new role eventually.
+I made the decision earlier in the year to take a career break: It's not something I've ever done before (I've always had another job lined up), but knew I wanted some time to spend on myself, some hobbies, and training. Which ultimately meant I'd need to find a new role eventually.
 
-Now that I'm fortunate enough to have secured a new role after my career break, I wanted to reflect on my own candidate experience and share it with others, as an IC in 2025.
+Now that I'm fortunate enough to have secured a new role as part of my career break, I wanted to reflect on my own candidate experience and share it with others, as an IC in 2025.
 
 # Timeline & Process Overview
+<!-- How long the search took.
+Typical interview process (number of stages, types of interviews).
+Note on how the process can feel like a full-time job. -->
+
 
 # Defining What I Wanted
+<!-- Importance of understanding your own priorities (company culture, product, size, etc.).
+How your preferences evolved during the search. -->
 
 # Where To Find A Job
+<!-- Networking and referrals.
+Job boards (LinkedIn, HN, etc.).
+Effectiveness of LinkedIn Premium and job alerts.
+Thoughts on AI tools for job search. -->
 
 # The Application Process
+<!-- Personalizing applications and cover letters.
+Filling in all requested fields.
+Using AI for brainstorming, but always personalizing. -->
 
 # Interview Stages
+<!-- Types of interviews (technical, system design, behavioral).
+Prevalence of LeetCode/live coding vs. take-home tests.
+Expectations for tech tests and honesty about time spent. -->
 
 # Coping With The Process
+<!-- Handling rejections and keeping multiple opportunities open.
+The emotional side: resilience, hope, and fit. -->
 
 # Final Thoughts
+<!-- Acknowledgement that everyone’s experience is different.
+Encouragement for others in the same situation.
+ -->
 
-<!-- TODO - link back to LI post for comments. -->
+<!-- TODO - CTA: invite readers to comment on LI post -->
 
+
+<!-- 
+Final checks:
+Appropriate anecdotes?
+ -->
 
 
 # Raw Notes
