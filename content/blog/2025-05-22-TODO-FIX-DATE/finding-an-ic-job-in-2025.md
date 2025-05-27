@@ -6,7 +6,9 @@ description: I'm fortunate to have secured a new role as part of my career break
 
 I made the decision earlier in the year to take a career break: It's not something I've ever done before (I've always had another job lined up), but knew I wanted some time to spend on myself, some hobbies, and training. Which ultimately meant I'd need to find a new role eventually.
 
-Now that I'm fortunate enough to have secured a new role as part of my career break, I wanted to reflect on my own candidate experience and share it with others, as an IC in 2025.
+Now that I'm fortunate enough to have secured a new role as part of my career break, I wanted to reflect on my own candidate experience and share it with others, as an IC in 2025. This is all based on my own experience & perceptions, rather than a scientific approach.
+
+_This post isn't about the things I did with my time during the career break: But, I would encourage you to consider a career break yourself! I've had a fantastic time._
 
 # Timeline & Process Overview
 <!-- How long the search took.
@@ -53,8 +55,6 @@ Appropriate anecdotes?
 
 
 # Raw Notes
-- Context, why I'm looking in the first place
-- Happy to say I've found a job, and now I can spend some time reflecting on my experience of the whole process (in 2025)
 - Timeline
     - Took a couple of months to find something right for me
     - Whilst my plan was to take some time out, I should have started to apply a few weeks earlier - as it can take several weeks for the initial response / screening
