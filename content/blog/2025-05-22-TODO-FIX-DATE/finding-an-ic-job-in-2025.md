@@ -11,14 +11,17 @@ Now that I'm fortunate enough to have secured a new role as part of my career br
 _This post isn't about the things I did with my time during the career break: But, I would encourage you to consider a career break yourself! I've had a fantastic time._
 
 # Defining What I Wanted
-<!-- Importance of understanding your own priorities (company culture, product, size, etc.).
-How your preferences evolved during the search. -->
+Logically, it makes sense to start with this step. Unfortunately for me, it wasn't necessarily clear until I started the process (in particular: as part of preparing for some interviews, and looking back at my strengths and achievements). 
 
-<!-- - Understanding what you want
-    - subjective, for me products + services I already use and love
-    - but not always, there are smaller businesses and startups out there you've not heard of. good to understand what you're really looking for in a company (for me: ambitious, high trust, end to end ownership, great engineering culture)
+However, I did identify a bunch of areas as part of this prepatory process (that were initially just my gut feeling), thus becoming much more clear that I wanted somewhere that:
+- I was passionate about the product
+- I could have ownership
+- I could have impact
+- Had technical challenges
+- Had a strong engineering culture
+- Remote first (with occasional team visits)
 
-- Remote Working -->
+I'd encourage anyone in a similar position to try and define this upfront, as it will help guide you on your application process.
 
 # The Application Process
 <!-- Personalizing applications and cover letters.
@@ -50,7 +53,7 @@ Thoughts on AI tools for job search. -->
             - The AI tools aren't giving you anything above copy & pasting to chatgpt anyway, and obviously you don't want to take the AI content verbatim as it just comes across as fake anyway -->
 
 # Timeline
-I'll start off with the timeline. My initial plan was to take ~2 months out - so my thoughts were if I took a few weeks out without even starting the process: no problem.
+My initial plan was to take ~2 months out - so my thoughts were if I took a few weeks out without even starting the process: no problem.
 
 The reality is that it took several weeks from the point of applying (even in the case of referrals) to get to the screening stage; so in retrospect I'd have definitely started this sooner.
 
