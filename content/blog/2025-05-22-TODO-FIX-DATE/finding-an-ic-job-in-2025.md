@@ -10,15 +10,26 @@ Now that I'm fortunate enough to have secured a new role as part of my career br
 
 _This post isn't about the things I did with my time during the career break: But, I would encourage you to consider a career break yourself! I've had a fantastic time._
 
-# Timeline & Process Overview
-<!-- How long the search took.
-Typical interview process (number of stages, types of interviews).
-Note on how the process can feel like a full-time job. -->
-
-
 # Defining What I Wanted
 <!-- Importance of understanding your own priorities (company culture, product, size, etc.).
 How your preferences evolved during the search. -->
+
+# Timeline & Process Overview
+I'll start off with the timeline. My initial plan was to take ~2 months out - so my thoughts were if I took a few weeks out without even starting the process: no problem.
+
+The reality is that it took several weeks from the point of applying (even in the case of referrals) to get to the screening stage.
+
+Once the ball was rolling, expect 4-6 stages with a week in-between. Even in a best case scenario that puts you in the ~2 month range straight away.
+
+The stages were typically: screening, experience deep dive, take home test, test review + improvements discussion, system design and behavioural. Some orgs had less stages, but typically encompassed multiple criteria in a single interview. Also some didn't have take home tests but opted for instead leet code and/or live pairing.
+
+Some organizations I worked with with were happy to fast track their process (e.g. bundle interviews to thr same day or week) to keep up with other orgs and remain competitive, so it didn't seem to be a hard rule either.
+
+Once the interviews started to come through, it almost immediately turned in to a full time job: from having nothing on, to several at once - all requiring their own preparation!
+
+In the end, the position I accepted took exactly 2 months from referral to offer - something for future me to remember!
+
+<!-- TODO - some sort of visual? -->
 
 # Where To Find A Job
 <!-- Networking and referrals.
