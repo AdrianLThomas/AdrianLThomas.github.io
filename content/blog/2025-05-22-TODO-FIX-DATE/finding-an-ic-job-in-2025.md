@@ -66,22 +66,22 @@ Once the interviews started to come through, it almost immediately turned in to 
 In the end, the position I accepted took exactly 2 months from referral to offer - something for future me to remember!
 
 # Interview Stages
-<!-- Types of interviews (technical, system design, behavioral).
-Prevalence of LeetCode/live coding vs. take-home tests.
+<!-- 
+
 Expectations for tech tests and honesty about time spent. -->
 
 The stages were typically: screening, experience deep dive, take home test, test review + improvements discussion, system design and behavioural. Some orgs had less stages, but typically encompassed multiple criteria in a single interview. Also some didn't have take home tests but opted for instead leet code and/or live pairing.
 
-| Stage                | Typical Duration | Notes                                  |
-|----------------------|-----------------|-----------------------------------------|
-| Application          | 1-3 weeks       | Waiting for responses                   |
-| Screening Call       | 1 week          | Initial chat with recruiter or manager  |
-| Experience Deep Dive | 1 week          | Technical/role-specific questions       |
-| Take Home Test       | 1-2 weeks       | Sometimes replaced by live coding       |
-| Test Review          | 1 week          | Discuss solution & improvements         |
-| System Design        | 1 week          | High-level technical interview          |
-| Behavioural          | 1 week          | Culture fit, values, teamwork           |
-| Offer                | -               | -                                       |
+| Stage                | Typical Duration | Notes                                              |
+|----------------------|-----------------|-----------------------------------------            |
+| Application          | 1-3 weeks       | Waiting for responses                               |
+| Screening Call       | 1 week          | Initial chat with recruiter or manager              |
+| Experience Deep Dive | 1 week          | Technical/role-specific questions                   |
+| Take Home Test       | 1-2 weeks       | Sometimes replaced by leet code / pair programming  |
+| Test Review          | 1 week          | Discuss solution & improvements                     |
+| System Design        | 1 week          | High-level technical interview                      |
+| Behavioural          | 1 week          | Culture fit, values, teamwork                       |
+| Offer                | -               | -                                                   |
 <!-- 
 - OK your application has been accepted, now what?
     - The process
@@ -98,9 +98,9 @@ The stages were typically: screening, experience deep dive, take home test, test
                 - Some expect an excellent, finished, production ready product within 3 hours
                 - Others expect the best you can do in that time, and not perfect. Enabling further in depth conversations at the next stage -->
 
-# Coping With The Process
-<!-- Handling rejections and keeping multiple opportunities open.
-The emotional side: resilience, hope, and fit. -->
+# Throughout The Process
+<!-- keeping multiple opportunities open.
+ -->
 
 <!-- 
 - Ongoing..
