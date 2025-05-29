@@ -44,16 +44,20 @@ It also allowed me to reach out to those who I hadn't spoken to in some time and
 Job alerts on LI were also handy. There was lots of noise, but a number of applications I made and interviewed for were ultimately ones I would have otherwise being unaware of.
 
 ## LI Premium
-
-I also gave LI Premium a go (first month was free, then went up to around ~£15, then ~£30+ after 😱): I personally don't think it's worth paying for. 
+I also gave LI Premium a go (first month was free, then ~£30+ after 😱): I personally don't think it's worth paying for. 
 
 The insights are interesting, particularly to get an understanding how a company is growing and in which areas - but some intentionally paywalled features (like seeing all the people who creeped your profile) I cared less about.
 
 The AI tools are not that helpful (beyond copying + pasting it straight in to free ChatGPT). Anything that was automatically written came across as AI, and the button to see "Am I suitable for this job?" was just a bit lazy (it told me I was suitable for things I definitely wasn't, and vice versa).
 
-## Types Of Companies Hiring
+## InMail / Recruiters
+I think this is the biggest difference I notice compared to a few years ago. Rather than receiving multiple messages a day - I'd maybe only be approached once or twice a week. I suspect we're still in a bit of a lull due to ZIRP [(as mentioned by Gergely over a year ago)](https://newsletter.pragmaticengineer.com/p/zirp-software-engineers), plus perhaps some caution with the AI boom currently ongoing.
+
+But, there are jobs out there - just seemingly quieter than it has been in the past.
 
 <!-- 
+## Types Of Companies Hiring
+
     Quite a few startups
     Some scaleups
     Larger orgs too
@@ -63,31 +67,21 @@ The AI tools are not that helpful (beyond copying + pasting it straight in to fr
  -->
 
 
-<!-- Networking and referrals.
-
-
-<!-- - Types of the companies hiring -->
-
-<!-- - Where to find a job?
-    - Network + referrals
-    - LI premium
-    - HN - I've seen this but not tried it
-    - LI job alerts, kind of handy but a lot of noise
-        - LI job alerts were useful (e.g. this is where I heard about the K6 role!), and obviously it's a useful platform in terms of networking (new and old connections)
-        - However LI premium is not worth paying for. The analytics are interesting, and it's worth the free trial (and perhaps even the discounted one), but the full price is just not worth the money.
-            - The AI tools aren't giving you anything above copy & pasting to chatgpt anyway, and obviously you don't want to take the AI content verbatim as it just comes across as fake anyway -->
-
 # The Application Process
-<!-- Personalizing applications and cover letters.
-Filling in all requested fields.
-Using AI for brainstorming, but always personalizing. -->
 
+Regardless of referral or application, this typically this involved submitting an up to date CV. However I did notice that for applications that had extra fields (e.g. specific questions or asking for a cover letter) usually invited me to interview rather than a rejection upfront. My assumption is your name lands on a spreadsheet, and if you're filling in more columns of that row you're more likely to stand out. Or, perhaps this feeds in to some kind of AI matching better?
 
-<!-- - On applying
-        - fill in the fields they ask for. I found more success writing a personalised cover letter, and answering any specific questions during that process 
-            - my assumption is your name lands on a spreadsheet, this if you're filling in more columns of the row you're more likely to stand out as it shows you've put in more effort too
-    - On AI use
-        - I did use it for brainstorming during the application process. My CV remained static and factual for all my applications, but if I had the opportunity to write a cover letter it seemed to work better for responses if I could tailor it to the job spec. I'm not suggesting throwing the job spec and your CV at AI to write the letter, but it's not a bad starting point to prompt for some key talking points.. write it out in your own words, with it's own quirks and personalize it. -->
+## Using AI To Apply
+
+This is something I didn't do: at least, not in a heavily automated way. Having been using generative AI for a while now - you can usually see immediately when someone has taken something written by AI verbatim. I'm aware there are tools out there to do apply on your behalf, but for such an early and important stage of the process it wasn't something I was willing to do.
+
+However, I'd be lying if I said I didn't use AI either. I did use it to:
+
+- Match job specs to the experience on my CV (thus helping me write tailored cover letters or prepare my [STAR technique](https://jobs.theguardian.com/article/how-to-use-the-star-technique-in-an-interview/) for interviews)
+- Bring structure to my brain dumps
+- Generally refine my thoughts and ramblings
+
+Overall, it helped me be more succinct throughout the prepatory process.
 
 # Interview Stages
 <!-- 
@@ -150,6 +144,7 @@ Appropriate anecdotes?
 <!-- 
 So many other things I could have spoken about but I haven't:
 - How I organized myself and prepared for each interview
+- How I made notes for each company and stage
 
 
 Any questions or comments? ask on the LI post.
