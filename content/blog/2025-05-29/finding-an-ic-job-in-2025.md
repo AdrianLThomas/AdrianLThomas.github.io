@@ -28,7 +28,7 @@ My initial plan was to take ~2 months out - so my thoughts were if I took a few 
 
 The reality is that it took several weeks from the point of applying (even in the case of referrals) to get to the screening stage; so in retrospect I'd have definitely started this sooner.
 
-Once the ball was rolling, expect 4-6 stages with a week in-between. Even in a best case scenario that puts you in the ~2 month range straight away.
+Once the ball was rolling, expect 4-6 stages with a week in-between. That puts you in the ~2 month range straight away.
 
 Some organisations I worked with were happy to fast track their process (e.g. bundle interviews to the same day or week) to keep up with other orgs and remain competitive, so it didn't seem to be a hard rule either.
 
@@ -56,7 +56,7 @@ I think this is the biggest difference I notice compared to a few years ago. Rat
 But, there are open jobs out there (startups, scaleups and larger orgs) - just seemingly quieter than it has been in the past.
 
 ## The Application Process
-Regardless of referral or application, this typically this involved submitting an up to date CV. However I did notice that for applications that had extra fields (e.g. specific questions or asking for a cover letter) usually invited me to interview rather than a rejection upfront. My assumption is your name lands on a spreadsheet, and if you're filling in more columns of that row you're more likely to stand out. Or, perhaps this feeds in to some kind of AI matching better?
+Regardless of referral or application, this typically involved submitting an up to date CV. However I did notice that for application forms that had extra fields (e.g. specific questions or asking for a cover letter) that I filled in, I was usually invited to interview rather than a rejection upfront. My assumption is your name lands on a spreadsheet, and if you're filling in more columns of that row you're more likely to stand out. Or, perhaps this feeds in to some kind of AI matching better?
 
 ### Using AI To Apply
 This is something I didn't do: at least, not in a heavily automated way. Having been using generative AI for a while now - you can usually see immediately when someone has taken something written by AI verbatim. I'm aware there are tools out there to apply on your behalf, but for such an early and important stage of the process it wasn't something I was willing to do.
@@ -72,7 +72,7 @@ Overall, it helped me be more succinct throughout the preparatory process.
 ## Interview Stages
 The stages were typically: screening, experience deep dive, take home test, test review + improvements discussion, system design and behavioural. Some orgs had fewer stages, but typically encompassed multiple criteria in a single interview. Also some didn't have take home tests but opted for instead leet code and/or live pairing.
 
-This table shows a worst case scenario (with all stages and timings):
+This table shows a worst case scenario (with stages and timings):
 
 | Stage                | Typical Duration | Notes                                               |
 |----------------------|------------------|-----------------------------------------            |
@@ -88,18 +88,18 @@ This table shows a worst case scenario (with all stages and timings):
 ### Use of AI
 Again I'll mostly be talking about my own usage. The only thing I noticed from the hiring side was that an AI notetaker was commonly in the same calls too.
 
-I found it really difficult to use AI during parts of the process. Personally, it felt like cheating, and my experience varied quite a bit depending on the company.
+The expectations on usage varied quite a bit depending on the company...
 
 #### Timeboxed Take Home Test
 I observed 3 scenarios that companies said:
 
-1. You cannot use it - just stick to the timebox
-2. You can use it, but you will be asked about the code written
-3. No mention at all
+1. You cannot use AI - just stick to the timebox
+2. You can use AI, but you will be asked about the code written
+3. No mention of AI at all
 
 Scenario 1 is just what my experience was before the rise of AI. The solution you submit may not be perfect for a given timebox, but you're given an opportunity to discuss those tradeoffs & shortcomings.
 
-I think Scenario 2 is fine, and is the reality of people using AI today in their work.
+I think Scenario 2 is just the reality of people using AI today in their work: you've got to understand and justify what you're producing for it to be sustainable.
 
 Scenario 3 obviously requires follow up clarification, otherwise there will be an assumption on either side about its use.
 
@@ -110,7 +110,7 @@ Despite my years of experience, I feel flustered, rushed and panicked. I was nev
 
 I did find the problems themselves weren't too ridiculous (e.g. I didn't get asked to implement some obscure algorithm). It was usually a problem I needed to read, understand and then introduce a change to (whilst collaborating with those on the call).
 
-I feel like having some quiet time to read / reflect on the problem before starting the exercise would have made a significant improvement to the process (e.g. the interviewers drop off the call for the first 10 minutes, or send out the material 15 minutes before the call).
+I feel like having some quiet time to read / reflect on the problem before starting the exercise would have made a significant improvement to the process (e.g. the interviewers drop off the call for the first 10 minutes, or send out the material 15 minutes before the call). That way, I have a mental model of the problem and can collaborate much better with the interviewers.
 
 ## Final Thoughts
 Overall it has been a very interesting process, and one I've not had before. I'm super grateful to all the friends and colleagues I've had the pleasure of working with over the years. Now it's time for me to enjoy some more time off before a new exciting role at the end of June!
