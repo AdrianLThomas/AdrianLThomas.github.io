@@ -120,10 +120,4 @@ I hope you enjoyed this post. There's a bunch of things I didn't talk about too,
 - How I made notes on each company and stage
 - Specifics around each stage
 
-So feel free to let me know any thoughts or questions!
-
-<!-- TODO
-
-You can find the LinkedIn post here.
-
--->
+So feel free to let me know any thoughts or questions! You can find the [LinkedIn post here](https://www.linkedin.com/posts/adrianthomas_job-hunting-as-an-ic-in-2025-reflections-activity-7333805176954249217-1SzV).
