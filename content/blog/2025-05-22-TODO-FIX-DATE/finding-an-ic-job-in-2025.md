@@ -53,19 +53,7 @@ The AI tools are not that helpful (beyond copying + pasting it straight in to fr
 ## InMail / Recruiters
 I think this is the biggest difference I notice compared to a few years ago. Rather than receiving multiple messages a day - I'd maybe only be approached once or twice a week. I suspect we're still in a bit of a lull due to ZIRP [(as mentioned by Gergely over a year ago)](https://newsletter.pragmaticengineer.com/p/zirp-software-engineers), plus perhaps some caution with the AI boom currently ongoing.
 
-But, there are jobs out there - just seemingly quieter than it has been in the past.
-
-<!-- 
-## Types Of Companies Hiring
-
-    Quite a few startups
-    Some scaleups
-    Larger orgs too
-
-    A number of AI companies: though the impression I got with these were they were less interested in people with understanding of fundamentals, and more in knowing their current tech stack inside out.
-
- -->
-
+But, there are open jobs out there (startups, scaleups and larger orgs) - just seemingly quieter than it has been in the past.
 
 # The Application Process
 Regardless of referral or application, this typically this involved submitting an up to date CV. However I did notice that for applications that had extra fields (e.g. specific questions or asking for a cover letter) usually invited me to interview rather than a rejection upfront. My assumption is your name lands on a spreadsheet, and if you're filling in more columns of that row you're more likely to stand out. Or, perhaps this feeds in to some kind of AI matching better?
@@ -125,41 +113,20 @@ I did find the problems themselves weren't too ridiculous (e.g. I didn't get ask
 I feel like having some quiet time to read / reflect on the problem before starting the exercise would have a made a significant improvement to the process (e.g. the interviewers drop off the call for the first 10 minutes, or send out the material 15 minutes before the call).
 
 
-<!-- 
-
-Expectations for tech tests and honesty about time spent. -->
-<!-- 
-- OK your application has been accepted, now what?
-    - The process
-        - Each step but also leet code
-        - Use of AI
-            - In the interviews
-            - Tech tests
-    - Preparing for each stage
-        - Guidance not always offered, but generally: xyz
-        - Tech tests
-            - Expectations are high. 
-            - Honesty expected within a certain timebox
-                - Difficult to gauge the right approach
-                - Some expect an excellent, finished, production ready product within 3 hours
-                - Others expect the best you can do in that time, and not perfect. Enabling further in depth conversations at the next stage -->
-
-# Throughout The Process
-<!-- keeping multiple opportunities open.
- -->
-
-<!-- 
-- Ongoing..
-    - Keep hope
-        - Some rejections are inevitable. It's not a reflection on you necessarily, it's just not the right fit. It's got to be mutual, and you wouldn't want to work somewhere you didn't feel like you could have impact, would you?
-        - Try to have a few things on the go at once... at least if you get knocked back by one, you have others to focus on... plus the process and response times of various companies are different anyway -->
-
 # Final Thoughts
-<!-- Acknowledgement that everyone’s experience is different.
-Encouragement for others in the same situation.
- -->
+Overall it has been a very interesting process, and one I've not had before. I'm super grateful to all the friends and colleagues I've had the pleasure of working with over the years. Now it's time for me to enjoy some more time off before a new exciting role at the end of June!
 
-<!-- TODO - CTA: invite readers to comment on LI post -->
+I hope you enjoyed this post. There's a bunch of things I didn't talk about too, like:
+- How I organized myself and prepared for each interview
+- How I made notes for each company and stage
+
+Please feel free to let me know any thoughts or questions.
+
+<!-- TODO
+
+You can find the LinkedIn post here.
+
+-->
 
 
 <!-- 
@@ -167,17 +134,6 @@ Final checks:
 Appropriate anecdotes?
  -->
         
-
-<!-- 
-So many other things I could have spoken about but I haven't:
-- How I organized myself and prepared for each interview
-- How I made notes for each company and stage
-
-
-Any questions or comments? ask on the LI post.
-
-
- -->
 
  <!-- 
  AI follow up
