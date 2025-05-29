@@ -68,11 +68,9 @@ But, there are jobs out there - just seemingly quieter than it has been in the p
 
 
 # The Application Process
-
 Regardless of referral or application, this typically this involved submitting an up to date CV. However I did notice that for applications that had extra fields (e.g. specific questions or asking for a cover letter) usually invited me to interview rather than a rejection upfront. My assumption is your name lands on a spreadsheet, and if you're filling in more columns of that row you're more likely to stand out. Or, perhaps this feeds in to some kind of AI matching better?
 
 ## Using AI To Apply
-
 This is something I didn't do: at least, not in a heavily automated way. Having been using generative AI for a while now - you can usually see immediately when someone has taken something written by AI verbatim. I'm aware there are tools out there to do apply on your behalf, but for such an early and important stage of the process it wasn't something I was willing to do.
 
 However, I'd be lying if I said I didn't use AI either. I did use it to:
@@ -84,23 +82,52 @@ However, I'd be lying if I said I didn't use AI either. I did use it to:
 Overall, it helped me be more succinct throughout the prepatory process.
 
 # Interview Stages
+The stages were typically: screening, experience deep dive, take home test, test review + improvements discussion, system design and behavioural. Some orgs had less stages, but typically encompassed multiple criteria in a single interview. Also some didn't have take home tests but opted for instead leet code and/or live pairing.
+
+This table shows a worst case scenario (with all stages and timings):
+
+| Stage                | Typical Duration | Notes                                               |
+|----------------------|------------------|-----------------------------------------            |
+| Application          | 1-3 weeks        | Waiting for responses                               |
+| Screening Call       | 1 week           | Initial chat with recruiter or manager              |
+| Experience Deep Dive | 1 week           | Technical/role-specific questions                   |
+| Take Home Test       | 1-2 weeks        | Sometimes replaced by leet code / pair programming  |
+| Test Review          | 1 week           | Discuss solution & improvements                     |
+| System Design        | 1 week           | High-level technical interview                      |
+| Behavioural          | 1 week           | Culture fit, values, teamwork                       |
+| Offer                | -                | -                                                   |
+
+## Use of AI
+Again I'll mostly be talking about my own usage. The only thing I noticed from the hiring side was that an AI notetaker was commonly in the same calls too.
+
+I found it really difficult to use AI during parts of the process. Personally, it felt like cheating, and my experience varied quite a bit depending on the company.
+
+### Timeboxed Take Home Test
+I observed 3 scenarios that companies said:
+
+1. You cannot use it - just stick to the timebox
+2. You can use it, but you will be asked about the code written
+3. No mention at all
+
+Scenario 1 is just what my experience was before the rise of AI. The solution you submit may not be perfect for a given timebox, but you're given an opportunity to discuss those tradeoffs & shortcomings.
+
+I think Scenario 2 is fine, and is the reality of people using AI today in their work.
+
+Scenario 3 obviously requires follow up clarification, otherwise there will be an assumption on either side about it's use.
+
+### Pairing / Leet Code
+For me personally, this was the worst stage. Many of the companies prempt this by asking you to treat your interviewers as colleagues, and to rely on them as you would in reality.
+
+Despite my years of experience, I feel flustered, rushed and panicked. I was never good at Drama in school, so pretending it was anything other than an interview didn't work for me. These are people you've not met before, and are supposed to feel comfortable with for that 30-60 minute window - I'm not even sure how to overcome this beyond practicing more interviews!
+
+I did find the problems themselves weren't too ridiculous (e.g. I didn't get asked to implement some obsecure algorithm). It was usually a problem I needed to read, understand and then introduce a change to (whilst collaborating with those on the call).
+
+I feel like having some quiet time to read / reflect on the problem before starting the exercise would have a made a significant improvement to the process (e.g. the interviewers drop off the call for the first 10 minutes, or send out the material 15 minutes before the call).
+
+
 <!-- 
 
 Expectations for tech tests and honesty about time spent. -->
-
-The stages were typically: screening, experience deep dive, take home test, test review + improvements discussion, system design and behavioural. Some orgs had less stages, but typically encompassed multiple criteria in a single interview. Also some didn't have take home tests but opted for instead leet code and/or live pairing.
-
-| Stage                | Typical Duration | Notes                                              |
-|----------------------|-----------------|-----------------------------------------            |
-| Application          | 1-3 weeks       | Waiting for responses                               |
-| Screening Call       | 1 week          | Initial chat with recruiter or manager              |
-| Experience Deep Dive | 1 week          | Technical/role-specific questions                   |
-| Take Home Test       | 1-2 weeks       | Sometimes replaced by leet code / pair programming  |
-| Test Review          | 1 week          | Discuss solution & improvements                     |
-| System Design        | 1 week          | High-level technical interview                      |
-| Behavioural          | 1 week          | Culture fit, values, teamwork                       |
-| Offer                | -               | -                                                   |
-
 <!-- 
 - OK your application has been accepted, now what?
     - The process
@@ -151,3 +178,10 @@ Any questions or comments? ask on the LI post.
 
 
  -->
+
+ <!-- 
+ AI follow up
+ Typos? british english
+ can summary / title be improved based on the content within?
+ any other improvements that can be seen?
+  -->
